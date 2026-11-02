@@ -1,6 +1,6 @@
-/* Figtree carries the Latin UI; Noto Sans + Devanagari cover the Indic scripts
-   offered by the language switcher, which Inter alone does not support. */
-@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+/* Noto Serif sets display, Noto Sans sets text, and Noto Sans Devanagari
+   covers the Indic scripts the language switcher offers. */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -28,6 +28,41 @@
 
     --color-hairline: 226 232 240;
 
+    /* ---------------------------------------------------------------
+       REDESIGN · 'Colour chapters' direction, 'paper and ink' palette.
+       The page is a sequence of full-bleed flat fields. The field
+       colours ARE the urgency scale, so colour carries medical meaning
+       on the home page before a patient ever sees a result.
+       --------------------------------------------------------------- */
+    --paper: 241 241 238;
+    --paper-step: 229 229 225;
+    --ink: 20 22 25;
+    --ink-soft: 90 94 100;
+
+    /* The four chapters. Each pairs a field with the ink that sits on it;
+       every pair is checked by the inspector for contrast. */
+    /* Blue, amber, orange, red: the exact four levels ConditionCard.tsx
+       already shows on a result ('Low Urgency' is blue there, and the top
+       level is called Emergency). The home page teaches this code so a
+       patient recognises it when their own result arrives. */
+    --field-low: 19 48 77;
+    --field-low-ink: 232 238 245;
+    --field-medium: 189 128 16;
+    --field-medium-ink: 26 18 3;
+    --field-high: 172 56 15;
+    --field-high-ink: 253 243 238;
+    --field-emergency: 122 21 21;
+    --field-emergency-ink: 248 238 238;
+    --field-close: 20 22 25;
+    --field-close-ink: 241 241 238;
+
+    /* Five type steps. Nothing on a redesigned page uses a sixth. */
+    --step-small: clamp(0.875rem, 0.85rem + 0.12vw, 0.9375rem);
+    --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+    --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+    --step-head: clamp(2rem, 1.3rem + 3.2vw, 3.5rem);
+    --step-display: clamp(2.75rem, 1.4rem + 5.2vw, 5rem);
+
     --color-urgency-low: 5 150 105;
     --color-urgency-medium: 217 119 6;
     --color-urgency-high: 234 88 12;
@@ -54,6 +89,19 @@
 
   p {
     text-wrap: pretty;
+  }
+
+  /* Noto Serif for display, Noto Sans for text. Chosen over a livelier
+     display face because these are the only two families that render all
+     nine scripts the language switcher offers (Devanagari, Bengali,
+     Telugu, Tamil, Gujarati, Kannada, Malayalam, Gurmukhi, Odia) with one
+     consistent design. Two faces is the house limit. */
+  .font-display {
+    font-family: 'Noto Serif', 'Noto Serif Devanagari', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 0.98;
+    text-wrap: balance;
   }
 
   /* A single visible focus ring for keyboard users across the whole app.
@@ -93,7 +141,6 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgb(var(--color-hairline));
-    @apply shadow-card;
   }
 
   /* Skip link — first tab stop, visible only once focused. Fixed and above the
@@ -101,7 +148,7 @@
   .skip-link {
     /* primary-strong, not primary: white on teal-600 is only 3.74:1. */
     @apply fixed left-4 top-0 z-[100] -translate-y-24 rounded-lg bg-primary-strong px-4 py-2
-           text-sm font-semibold text-primary-fg shadow-card transition-transform;
+           text-sm font-semibold text-primary-fg transition-transform;
   }
   .skip-link:focus {
     @apply translate-y-3;
@@ -165,5 +212,39 @@
   .waveform-bar {
     height: 12px !important;
     animation: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Entrance motion. The hidden state is scoped to .js-motion, which
+   src/hooks/useReveal.ts adds to <html> only once the observer is running,
+   so content is never left invisible when the script does not run.
+   Transform and opacity only.
+--------------------------------------------------------------------------- */
+.js-motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.js-motion [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 620ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 620ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* The signature move: a chapter's result fragment arrives from the side as
+   the field fills the screen, so each urgency chapter lands the same way. */
+.js-motion [data-reveal='aside'] {
+  transform: translateX(28px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-motion [data-reveal],
+  .js-motion [data-reveal].is-in,
+  .js-motion [data-reveal='aside'] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }

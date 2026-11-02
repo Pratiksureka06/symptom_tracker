@@ -86,40 +86,30 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <header className="bg-white/85 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 shadow-xs transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="bg-paper sticky top-0 z-50">
+      <div className="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-12">
         <div className="flex justify-between items-center h-16">
           
           {/* Brand Identity & Logo */}
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 to-teal-700 flex items-center justify-center text-white shadow-sm shadow-teal-700/20 group-hover:scale-105 transition-transform">
-                <Activity className="h-5 w-5" />
-              </div>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-xl font-extrabold text-slate-900 tracking-tight">MediScan</span>
-                <span className="hidden sm:inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-50 text-teal-700 border border-teal-200/60 uppercase tracking-wider">
-                  AI-DX 4.2
-                </span>
-              </div>
+              <span className="font-display text-[1.5rem] leading-none text-onink">MediScan</span>
             </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-1 pl-1">
               {navLinks.map((link) => {
-                const Icon = link.icon;
                 const isActive = location.pathname === link.path;
                 return (
                   <Link
                     key={link.path}
                     to={link.path}
-                    className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    className={`px-3 py-2 text-small ${
                       isActive
-                        ? 'bg-teal-50 text-teal-700 font-bold shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                        ? 'font-semibold text-onink underline underline-offset-4'
+                        : 'text-ink-soft hover:text-onink'
                     }`}
                   >
-                    <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-teal-700' : 'text-slate-500'}`} />
                     <span>{link.label}</span>
                   </Link>
                 );
@@ -236,13 +226,13 @@ const Header: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-teal-700 rounded-lg hover:bg-slate-50 transition-colors"
+                  className="px-3 py-2 text-small text-ink-soft hover:text-onink"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="px-3.5 py-1.5 bg-gradient-to-r from-teal-600 to-emerald-600 text-white text-xs font-bold rounded-xl shadow-xs hover:from-teal-700 hover:to-emerald-700 transition-all"
+                  className="bg-onink px-4 py-2 text-small font-semibold text-paper hover:bg-field-low"
                 >
                   Register
                 </Link>

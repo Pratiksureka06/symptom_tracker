@@ -34,6 +34,25 @@ export default {
         },
         hairline: token('--color-hairline'),
 
+        // Redesign · 'paper and ink' ground plus the four chapter fields.
+        paper: {
+          DEFAULT: token('--paper'),
+          step: token('--paper-step'),
+        },
+        onink: token('--ink'),
+        field: {
+          low: token('--field-low'),
+          'low-ink': token('--field-low-ink'),
+          medium: token('--field-medium'),
+          'medium-ink': token('--field-medium-ink'),
+          high: token('--field-high'),
+          'high-ink': token('--field-high-ink'),
+          emergency: token('--field-emergency'),
+          'emergency-ink': token('--field-emergency-ink'),
+          close: token('--field-close'),
+          'close-ink': token('--field-close-ink'),
+        },
+
         // Clinical urgency scale — these carry medical meaning, so they are
         // named by intent rather than by hue.
         urgency: {
@@ -45,11 +64,9 @@ export default {
       },
 
       fontFamily: {
-        // Figtree carries Latin; Noto Sans covers the 12 Indic scripts the
-        // language switcher offers and Inter remains as a local fallback.
+        // Noto Sans covers Latin and every Indic script the language
+        // switcher offers, so one family serves all 12 languages.
         sans: [
-          'Figtree',
-          'Inter',
           'Noto Sans',
           'Noto Sans Devanagari',
           'system-ui',
@@ -57,10 +74,17 @@ export default {
           'Segoe UI',
           'sans-serif',
         ],
-        numeric: ['Figtree', 'system-ui', 'sans-serif'],
+        numeric: ['Noto Sans', 'system-ui', 'sans-serif'],
       },
 
       fontSize: {
+        // The five redesign steps. Anything else is a sixth size.
+        small: ['var(--step-small)', { lineHeight: '1.5' }],
+        body: ['var(--step-body)', { lineHeight: '1.55' }],
+        lead: ['var(--step-lead)', { lineHeight: '1.35' }],
+        head: ['var(--step-head)', { lineHeight: '1.02', letterSpacing: '-0.025em' }],
+        display: ['var(--step-display)', { lineHeight: '0.92', letterSpacing: '-0.035em' }],
+
         // Clinical data readouts need tighter tracking than body copy.
         'stat-sm': ['1.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
         'stat': ['2.25rem', { lineHeight: '1.05', letterSpacing: '-0.025em', fontWeight: '700' }],
