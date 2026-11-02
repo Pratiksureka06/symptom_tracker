@@ -1,0 +1,25 @@
+{
+  "name": "MediScan — AI Symptom Tracker & Health Analysis",
+  "short_name": "MediScan",
+  "description": "Intelligent ML-powered symptom tracking, Bayesian health analysis, and medical insights platform.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0d9488",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "48x48 72x72 96x96 128x128",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["medical", "health", "lifestyle"]
+}
