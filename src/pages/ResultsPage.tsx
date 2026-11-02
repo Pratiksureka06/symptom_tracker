@@ -253,10 +253,10 @@ const ResultsPage: React.FC = () => {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-[rgb(var(--ink))] text-white">
-                    Stage 1 Medical Triage
+                    Step one
                   </span>
                   <span className="text-[0.8125rem] text-[rgb(var(--ink))] font-medium">
-                    Hierarchical Organ System Identification
+                    Which part of the body this points to
                   </span>
                 </div>
                 <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2.5 mt-1">
@@ -285,13 +285,13 @@ const ResultsPage: React.FC = () => {
               {differentialDiagnosis && (
                 <div className="bg-white rounded-lg p-3.5 border border-[rgb(var(--app-border))]/70 text-right shrink-0">
                   <div className="text-[11px] font-semibold text-[rgb(var(--ink-soft))]">
-                    Top-3 Differential Coverage
+                    How much the top three explain
                   </div>
                   <div className="text-2xl font-extrabold text-[rgb(var(--ink))] mt-0.5">
                     {differentialDiagnosis.top3CoveragePercent}%
                   </div>
                   <div className="text-[11px] text-[rgb(var(--ink-soft))]">
-                    cumulative confidence
+                    of your symptoms
                   </div>
                 </div>
               )}
@@ -302,7 +302,7 @@ const ResultsPage: React.FC = () => {
         {/* Symptoms Overview */}
         <div className="bg-white rounded-lg p-4 mb-6 border border-slate-200/80">
           <h2 className="text-sm font-semibold text-[rgb(var(--ink-soft))] mb-2.5">
-            Symptoms Evaluated ({selectedSymptoms.length})
+            What you told us ({selectedSymptoms.length})
           </h2>
           <div className="flex flex-wrap gap-2">
             {selectedSymptoms.map(symptom => (
@@ -327,12 +327,12 @@ const ResultsPage: React.FC = () => {
                 {t('possibleConditions')}
               </h2>
               <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-0.5">
-                Stage 2: Differential diagnosis ranked by category-conditioned probability
+                Step two: what fits best, ranked within that part of the body
               </p>
             </div>
             {differentialDiagnosis && (
               <span className="hidden sm:inline-flex text-[0.8125rem] text-slate-600 bg-[rgb(var(--app-raised))] px-2.5 py-1 rounded border border-slate-200">
-                Top-1 to Top-3 Diagnostic Range
+                Best match first
               </span>
             )}
           </div>

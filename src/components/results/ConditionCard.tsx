@@ -58,12 +58,12 @@ const ConditionCard: React.FC<ConditionCardProps> = ({ condition }) => {
         <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
           {condition.rank === 1 && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.8125rem] font-semibold bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border border-[rgb(var(--app-border))]">
-               Top-1 Primary Match
+               Best match
             </span>
           )}
           {condition.rank && condition.rank > 1 && condition.rank <= 3 && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.8125rem] font-semibold bg-[rgb(var(--app-raised))] text-[rgb(var(--ink-soft))] border border-[rgb(var(--app-border))]">
-              #{condition.rank} Top-3 Differential
+              Also worth considering
             </span>
           )}
           {condition.rank && condition.rank > 3 && (

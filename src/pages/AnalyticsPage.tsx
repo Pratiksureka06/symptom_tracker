@@ -351,9 +351,9 @@ const AnalyticsPage: React.FC = () => {
             <div>
               <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
                 <Activity className="h-6 w-6 text-[rgb(var(--ink))]" />
-                Health Analytics Dashboard
+                Your health over time
               </h1>
-              <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">Longitudinal symptom trends, trigger correlation, and health score</p>
+              <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">How your symptoms have changed, and what seems to set them off</p>
             </div>
           </div>
 
@@ -591,9 +591,9 @@ const AnalyticsPage: React.FC = () => {
             <div className="w-16 h-16 rounded-full bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] flex items-center justify-center mx-auto mb-4">
               <BarChart2 className="h-8 w-8 text-[rgb(var(--ink))]" />
             </div>
-            <h2 className="text-xl font-bold text-slate-800 mb-2">No Analytics Data Yet</h2>
+            <h2 className="text-xl font-bold text-slate-800 mb-2">Nothing to chart yet</h2>
             <p className="text-sm text-[rgb(var(--ink-soft))] max-w-md mx-auto mb-6">
-              Complete your first symptom check to open longitudinal health trends, trigger correlation analysis, and your personal Health Score.
+              Run your first check and this fills in: how your symptoms move over time, what sets them off, and your health score.
             </p>
             <Link
               to="/symptom-checker"
