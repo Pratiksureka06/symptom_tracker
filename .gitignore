@@ -35,3 +35,6 @@ archive (1)/
 # Agent skill packs (reinstallable; see skills-lock.json)
 .agents/
 .claude/skills/
+
+# Design-skill working files (screenshots, inspection reports)
+.taste-skill/
