@@ -37,20 +37,20 @@ const MedicationForm: React.FC<MedicationFormProps> = ({ addMedication }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="glass-card bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-teal-100/70 shadow-lg shadow-teal-900/5">
+    <form onSubmit={handleSubmit} className="app-panel bg-white/90 p-6 rounded-lg border border-teal-100/70">
       <div className="flex items-center gap-3 pb-4 mb-5 border-b border-slate-100">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-teal-600/20">
+        <div className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] w-10 h-10 rounded-lg flex items-center justify-center text-white">
           <Pill className="w-5 h-5" />
         </div>
         <div>
           <h3 className="font-semibold text-slate-800 text-base">Register Prescription / Supplement</h3>
-          <p className="text-xs text-slate-500">Track dosing adherence and clinical schedules</p>
+          <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">Track dosing adherence and clinical schedules</p>
         </div>
       </div>
 
       <div className="space-y-4">
         <div>
-          <label htmlFor="med-name" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+          <label htmlFor="med-name" className="block text-[0.8125rem] font-semibold text-slate-700 mb-1.5">
             Medication Name
           </label>
           <input
@@ -58,14 +58,14 @@ const MedicationForm: React.FC<MedicationFormProps> = ({ addMedication }) => {
             id="med-name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full text-sm bg-slate-50/70 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all"
+            className="w-full text-sm bg-[rgb(var(--app-ground))]/70 border border-slate-200/90 rounded-lg px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors"
             placeholder="e.g., Amoxicillin, Metformin, Paracetamol"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="med-dosage" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+          <label htmlFor="med-dosage" className="block text-[0.8125rem] font-semibold text-slate-700 mb-1.5">
             Dosage & Strength
           </label>
           <input
@@ -73,14 +73,14 @@ const MedicationForm: React.FC<MedicationFormProps> = ({ addMedication }) => {
             id="med-dosage"
             value={dosage}
             onChange={(e) => setDosage(e.target.value)}
-            className="w-full text-sm bg-slate-50/70 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all"
+            className="w-full text-sm bg-[rgb(var(--app-ground))]/70 border border-slate-200/90 rounded-lg px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors"
             placeholder="e.g., 500mg, 10ml, 1 tablet"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="med-frequency" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+          <label htmlFor="med-frequency" className="block text-[0.8125rem] font-semibold text-slate-700 mb-1.5">
             Frequency & Timing
           </label>
           <input
@@ -88,7 +88,7 @@ const MedicationForm: React.FC<MedicationFormProps> = ({ addMedication }) => {
             id="med-frequency"
             value={frequency}
             onChange={(e) => setFrequency(e.target.value)}
-            className="w-full text-sm bg-slate-50/70 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all"
+            className="w-full text-sm bg-[rgb(var(--app-ground))]/70 border border-slate-200/90 rounded-lg px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors"
             placeholder="e.g., Twice a day after meals"
             required
           />
@@ -99,11 +99,11 @@ const MedicationForm: React.FC<MedicationFormProps> = ({ addMedication }) => {
                 key={preset}
                 type="button"
                 onClick={() => setFrequency(preset)}
-                className={`text-xs px-2.5 py-1 rounded-lg border transition-all ${
-                  frequency === preset
-                    ? 'bg-teal-50 text-teal-700 border-teal-300 font-medium'
-                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
-                }`}
+                className={`text-[0.8125rem] px-2.5 py-1 rounded-lg border transition-colors ${
+ frequency === preset
+ ? 'bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border-[rgb(var(--app-border))] font-medium'
+ : 'bg-[rgb(var(--app-ground))] text-slate-600 border-slate-200 hover:bg-[rgb(var(--app-raised))]'
+ }`}
               >
                 {preset}
               </button>
@@ -115,7 +115,7 @@ const MedicationForm: React.FC<MedicationFormProps> = ({ addMedication }) => {
       <div className="mt-6 pt-2">
         <button
           type="submit"
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-medium text-sm rounded-xl shadow-md shadow-teal-600/25 active:scale-[0.99] transition-all"
+          className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] w-full flex items-center justify-center gap-2 px-4 py-2.5 text-white font-medium text-sm rounded-lg active:scale-[0.99] transition-colors"
         >
           <Plus className="h-4 w-4" />
           <span>Add to Active Regimen</span>

@@ -42,14 +42,14 @@ const DoctorPortalPage: React.FC = () => {
   // If user is not logged in as a doctor, show clinical access gate with one-click doctor sign-in
   if (!isDoctor) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-b from-slate-50 via-teal-50/25 to-slate-50 py-16 px-4 flex items-center justify-center">
-        <div className="glass-card bg-white/95 backdrop-blur-md max-w-lg w-full p-8 rounded-3xl border border-slate-200 text-center shadow-xl shadow-teal-900/5 space-y-5">
-          <div className="w-16 h-16 rounded-2xl bg-teal-100 border border-teal-200 text-teal-700 flex items-center justify-center mx-auto shadow-sm">
+      <div className="min-h-[calc(100vh-4rem)] py-16 px-4 flex items-center justify-center">
+        <div className="app-panel bg-white/95 max-w-lg w-full p-8 rounded-lg border border-slate-200 text-center space-y-5">
+          <div className="w-16 h-16 rounded-lg bg-[rgb(var(--app-raised))] border border-[rgb(var(--app-border))] text-[rgb(var(--ink))] flex items-center justify-center mx-auto">
             <Stethoscope className="w-8 h-8" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Physician Authentication Required</h2>
-            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+            <h1 className="app-title">Sign in as a doctor</h1>
+            <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-1 max-w-sm mx-auto">
               This clinical dashboard is restricted to licensed medical practitioners to inspect patient triage data, Bayesian differential diagnoses, and issue clinical orders.
             </p>
           </div>
@@ -57,7 +57,7 @@ const DoctorPortalPage: React.FC = () => {
           <div className="pt-2 space-y-2.5">
             <button
               onClick={() => loginAsDemo('doctor', 'Pulmonologist')}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-xs shadow-md shadow-teal-600/20 active:scale-[0.99] transition-all"
+              className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-white font-bold text-[0.8125rem] active:scale-[0.99] transition-colors"
             >
               <Stethoscope className="w-4 h-4" />
               <span>Sign In as Demo Physician (Dr. Aris Thorne, Pulmonologist)</span>
@@ -65,7 +65,7 @@ const DoctorPortalPage: React.FC = () => {
 
             <Link
               to="/login"
-              className="block py-2 text-xs font-semibold text-slate-600 hover:text-teal-700 transition-colors"
+              className="block py-2 text-[0.8125rem] font-semibold text-slate-600 hover:text-[rgb(var(--ink))] transition-colors"
             >
               Or Sign in with Custom Doctor Account
             </Link>
@@ -186,24 +186,24 @@ const DoctorPortalPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-b from-slate-50 via-teal-50/20 to-slate-50 px-4 py-8">
+    <div className="min-h-[calc(100vh-4rem)] px-4 py-8">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Doctor Identity Header */}
-        <div className="glass-card bg-white/95 backdrop-blur-md rounded-2xl border border-teal-100/80 p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="app-panel bg-white/95 rounded-lg border border-teal-100/80 p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-700 to-emerald-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-teal-700/20 shrink-0">
+            <div className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] w-14 h-14 rounded-lg text-white flex items-center justify-center font-bold text-xl shrink-0">
               <Stethoscope className="w-7 h-7" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
+                <h1 className="app-title">
                   {doctor?.name}
                 </h1>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800 border border-teal-200">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.8125rem] font-bold bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border border-[rgb(var(--app-border))]">
                   Licensed Clinician
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-1">
                 {doctor?.specialty} • {doctor?.hospital} • License: {doctor?.licenseNumber}
               </p>
             </div>
@@ -211,17 +211,17 @@ const DoctorPortalPage: React.FC = () => {
 
           {/* Quick Metrics */}
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-center">
-              <p className="text-xs text-slate-500">Total Consults</p>
+            <div className="px-3.5 py-2 rounded-lg bg-[rgb(var(--app-ground))] border border-slate-200 text-center">
+              <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">Total Consults</p>
               <p className="text-base font-bold text-slate-800">{doctorConsultations.length}</p>
             </div>
-            <div className="px-3.5 py-2 rounded-xl bg-amber-50 border border-amber-200 text-center">
-              <p className="text-xs text-amber-700">Pending Review</p>
+            <div className="px-3.5 py-2 rounded-lg bg-amber-50 border border-amber-200 text-center">
+              <p className="text-[0.8125rem] text-amber-700">Pending Review</p>
               <p className="text-base font-bold text-amber-900">{pendingCount}</p>
             </div>
-            <div className="px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-center">
-              <p className="text-xs text-emerald-700">Completed</p>
-              <p className="text-base font-bold text-emerald-900">{reviewedCount}</p>
+            <div className="px-3.5 py-2 rounded-lg bg-[rgb(var(--app-raised))] border border-[rgb(var(--app-border))] text-center">
+              <p className="text-[0.8125rem] text-[rgb(var(--ink))]">Completed</p>
+              <p className="text-base font-bold text-[rgb(var(--ink))]">{reviewedCount}</p>
             </div>
           </div>
         </div>
@@ -231,44 +231,44 @@ const DoctorPortalPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setFilterStatus('all')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                filterStatus === 'all'
-                  ? 'bg-teal-700 text-white shadow-sm'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-[0.8125rem] font-semibold transition-colors ${
+ filterStatus === 'all'
+ ? 'bg-[rgb(var(--ink))] text-white '
+ : 'bg-white text-slate-600 border border-slate-200 hover:bg-[rgb(var(--app-ground))]'
+ }`}
             >
               All Cases ({doctorConsultations.length})
             </button>
             <button
               onClick={() => setFilterStatus('pending')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                filterStatus === 'pending'
-                  ? 'bg-amber-600 text-white shadow-sm'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-[0.8125rem] font-semibold transition-colors ${
+ filterStatus === 'pending'
+ ? 'bg-amber-600 text-white '
+ : 'bg-white text-slate-600 border border-slate-200 hover:bg-[rgb(var(--app-ground))]'
+ }`}
             >
               Pending ({pendingCount})
             </button>
             <button
               onClick={() => setFilterStatus('reviewed')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                filterStatus === 'reviewed'
-                  ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-[0.8125rem] font-semibold transition-colors ${
+ filterStatus === 'reviewed'
+ ? 'bg-[rgb(var(--ink))] text-white '
+ : 'bg-white text-slate-600 border border-slate-200 hover:bg-[rgb(var(--app-ground))]'
+ }`}
             >
               Completed ({reviewedCount})
             </button>
           </div>
 
           <div className="relative w-full sm:w-64">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[rgb(var(--ink-soft))] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search patient or complaint..."
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10 text-slate-800"
+              className="w-full pl-9 pr-3 py-1.5 text-[0.8125rem] bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-2 focus:ring-[rgb(var(--app-border))]/10 text-slate-800"
             />
           </div>
         </div>
@@ -282,22 +282,22 @@ const DoctorPortalPage: React.FC = () => {
             return (
               <div
                 key={consultation.id}
-                className="glass-card bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/90 hover:border-teal-200 p-5 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="app-panel bg-white/95 rounded-lg border border-slate-200/90 hover:border-[rgb(var(--app-border))] p-5 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4"
               >
                 <div className="space-y-1.5 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="font-bold text-slate-800 text-base">{consultation.patientName}</h3>
                     {consultation.patientAge && (
-                      <span className="text-xs text-slate-500">
+                      <span className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">
                         ({consultation.patientAge}y • {consultation.patientGender})
                       </span>
                     )}
                     <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                        consultation.status === 'reviewed'
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : 'bg-amber-50 text-amber-700 border-amber-200'
-                      }`}
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.8125rem] font-semibold border ${
+ consultation.status === 'reviewed'
+ ? 'bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border-[rgb(var(--app-border))]'
+ : 'bg-amber-50 text-amber-700 border-amber-200'
+ }`}
                     >
                       {consultation.status === 'reviewed' ? (
                         <>
@@ -314,30 +314,30 @@ const DoctorPortalPage: React.FC = () => {
 
                     {topCondition && (
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                          topCondition.urgency === 'emergency'
-                            ? 'bg-rose-100 text-rose-800'
-                            : topCondition.urgency === 'high'
-                            ? 'bg-amber-100 text-amber-800'
-                            : 'bg-teal-100 text-teal-800'
-                        }`}
+                        className={`inline-flex items-center px-2 py-0.5 rounded-md text-[0.8125rem] font-bold ${
+ topCondition.urgency === 'emergency'
+ ? 'bg-rose-100 text-rose-800'
+ : topCondition.urgency === 'high'
+ ? 'bg-amber-100 text-amber-800'
+ : 'bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))]'
+ }`}
                       >
                         Urgency: {topCondition.urgency}
                       </span>
                     )}
                   </div>
 
-                  <p className="text-xs text-slate-600 font-medium">
+                  <p className="text-[0.8125rem] text-slate-600 font-medium">
                     Chief Complaint: <span className="text-slate-800">{consultation.chiefComplaint}</span>
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                  <div className="flex flex-wrap items-center gap-3 text-[0.8125rem] text-[rgb(var(--ink-soft))]">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5" />
                       {new Date(consultation.date).toLocaleString()}
                     </span>
                     {hasSnapshot && (
-                      <span className="text-teal-700 font-semibold flex items-center gap-1">
+                      <span className="text-[rgb(var(--ink))] font-semibold flex items-center gap-1">
                         <Activity className="w-3.5 h-3.5" />
                         Attached AI Triage ({consultation.symptomCheckSnapshot?.symptoms.length} symptoms)
                       </span>
@@ -351,17 +351,17 @@ const DoctorPortalPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleExportConsultationPDF(consultation)}
-                      className="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors"
+                      className="p-2 rounded-lg border border-slate-200 hover:bg-[rgb(var(--app-ground))] text-slate-600 transition-colors"
                       title="Export Signed Clinical Note as PDF"
                     >
-                      <Download className="w-4 h-4 text-teal-700" />
+                      <Download className="w-4 h-4 text-[rgb(var(--ink))]" />
                     </button>
                   )}
 
                   <button
                     type="button"
                     onClick={() => handleOpenDossier(consultation)}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-xs shadow-sm active:scale-[0.99] transition-all"
+                    className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] flex items-center gap-1.5 px-4 py-2 rounded-lg text-white font-bold text-[0.8125rem] active:scale-[0.99] transition-colors"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     <span>{consultation.status === 'reviewed' ? 'Review & Edit Notes' : 'Inspect Patient Dossier'}</span>
@@ -372,10 +372,10 @@ const DoctorPortalPage: React.FC = () => {
           })}
 
           {doctorConsultations.length === 0 && (
-            <div className="text-center py-16 px-4 bg-white/70 rounded-2xl border border-dashed border-slate-200">
+            <div className="text-center py-16 px-4 bg-white/70 rounded-lg border border-dashed border-slate-200">
               <CheckCircle2 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
               <h3 className="text-base font-bold text-slate-700">Triage Queue Empty</h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-1">
                 No patient consultations currently matching this criteria.
               </p>
             </div>
@@ -385,12 +385,12 @@ const DoctorPortalPage: React.FC = () => {
 
       {/* Comprehensive Patient Dossier & Review Modal */}
       {selectedConsultation && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-6 animate-in fade-in zoom-in-95 duration-150 max-h-[92vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full p-6 sm:p-7 border border-slate-200 space-y-6 animate-in fade-in zoom-in-95 duration-150 max-h-[92vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-lg shrink-0">
+                <div className="w-11 h-11 rounded-lg bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] flex items-center justify-center font-bold text-lg shrink-0">
                   <User className="w-6 h-6" />
                 </div>
                 <div>
@@ -398,31 +398,31 @@ const DoctorPortalPage: React.FC = () => {
                     <h3 className="font-bold text-slate-900 text-lg">
                       Clinical Dossier: {selectedConsultation.patientName}
                     </h3>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">
+                    <span className="px-2 py-0.5 rounded-full text-[0.8125rem] font-bold bg-[rgb(var(--app-raised))] text-slate-700">
                       ID: {selectedConsultation.patientId}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">
                     Age: {selectedConsultation.patientAge || '42'} • Gender: {selectedConsultation.patientGender || 'Male'} • Submitted: {new Date(selectedConsultation.date).toLocaleString()}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedConsultation(null)}
-                className="p-1.5 rounded-xl text-slate-500 hover:text-slate-600 hover:bg-slate-100"
+                className="p-1.5 rounded-lg text-[rgb(var(--ink-soft))] hover:text-slate-600 hover:bg-[rgb(var(--app-raised))]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Section 1: Chief Complaint */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs space-y-1.5">
-              <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px]">
+            <div className="p-4 rounded-lg bg-[rgb(var(--app-ground))] border border-slate-200/80 text-[0.8125rem] space-y-1.5">
+              <h4 className="font-bold text-slate-800 text-[11px]">
                 Chief Complaint & Consultation Purpose
               </h4>
               <p className="text-slate-700 text-sm font-medium">{selectedConsultation.chiefComplaint}</p>
               {selectedConsultation.notes && (
-                <p className="text-slate-500 italic pt-1">Patient Note: "{selectedConsultation.notes}"</p>
+                <p className="text-[rgb(var(--ink-soft))] italic pt-1">Patient Note: "{selectedConsultation.notes}"</p>
               )}
             </div>
 
@@ -430,11 +430,11 @@ const DoctorPortalPage: React.FC = () => {
             {selectedConsultation.symptomCheckSnapshot ? (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                    <Activity className="w-4 h-4 text-teal-700" />
+                  <h4 className="text-[0.8125rem] font-bold text-slate-800 flex items-center gap-1.5">
+                    <Activity className="w-4 h-4 text-[rgb(var(--ink))]" />
                     <span>Two-Stage Bayesian Diagnostic Snapshot</span>
                   </h4>
-                  <span className="text-xs text-teal-700 font-semibold">
+                  <span className="text-[0.8125rem] text-[rgb(var(--ink))] font-semibold">
                     Calibrated on 773 Conditions
                   </span>
                 </div>
@@ -444,10 +444,10 @@ const DoctorPortalPage: React.FC = () => {
                   {selectedConsultation.symptomCheckSnapshot.conditions.slice(0, 3).map((c, idx) => (
                     <div
                       key={c.id}
-                      className="p-3 rounded-xl border border-slate-200 bg-white shadow-xs text-xs space-y-1"
+                      className="p-3 rounded-lg border border-slate-200 bg-white text-[0.8125rem] space-y-1"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-[10px] font-bold text-teal-700">
+                        <span className="font-mono text-[0.8125rem] font-bold text-[rgb(var(--ink))]">
                           Rank #{idx + 1}
                         </span>
                         <span className="font-bold text-slate-800">
@@ -456,13 +456,13 @@ const DoctorPortalPage: React.FC = () => {
                       </div>
                       <h5 className="font-bold text-slate-800 truncate">{c.name}</h5>
                       <span
-                        className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-semibold ${
-                          c.urgency === 'emergency'
-                            ? 'bg-rose-100 text-rose-800'
-                            : c.urgency === 'high'
-                            ? 'bg-amber-100 text-amber-800'
-                            : 'bg-slate-100 text-slate-700'
-                        }`}
+                        className={`inline-block px-1.5 py-0.5 rounded text-[0.8125rem] font-semibold ${
+ c.urgency === 'emergency'
+ ? 'bg-rose-100 text-rose-800'
+ : c.urgency === 'high'
+ ? 'bg-amber-100 text-amber-800'
+ : 'bg-[rgb(var(--app-raised))] text-slate-700'
+ }`}
                       >
                         {c.urgency}
                       </span>
@@ -472,17 +472,17 @@ const DoctorPortalPage: React.FC = () => {
 
                 {/* Reported Symptoms */}
                 <div>
-                  <h5 className="text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2">
+                  <h5 className="text-[11px] font-bold text-slate-600 mb-2">
                     Reported Symptoms & Severity
                   </h5>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {selectedConsultation.symptomCheckSnapshot.symptoms.map((s) => (
                       <div
                         key={s.id}
-                        className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs flex items-center justify-between"
+                        className="p-2 rounded-lg bg-[rgb(var(--app-ground))] border border-slate-200 text-[0.8125rem] flex items-center justify-between"
                       >
                         <span className="font-semibold text-slate-800">{s.name}</span>
-                        <span className="px-2 py-0.5 rounded-md bg-teal-50 text-teal-700 font-medium text-[11px]">
+                        <span className="px-2 py-0.5 rounded-md bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] font-medium text-[11px]">
                           {s.severity || 'Mild'} • {s.duration || 'N/A'}
                         </span>
                       </div>
@@ -494,14 +494,14 @@ const DoctorPortalPage: React.FC = () => {
                 {selectedConsultation.symptomCheckSnapshot.triggers &&
                   selectedConsultation.symptomCheckSnapshot.triggers.length > 0 && (
                     <div>
-                      <h5 className="text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                      <h5 className="text-[11px] font-bold text-slate-600 mb-1.5">
                         Environmental / Lifestyle Triggers
                       </h5>
                       <div className="flex flex-wrap gap-1.5">
                         {selectedConsultation.symptomCheckSnapshot.triggers.map((t) => (
                           <span
                             key={t}
-                            className="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 text-xs"
+                            className="px-2 py-0.5 rounded-lg bg-[rgb(var(--app-raised))] text-slate-700 text-[0.8125rem]"
                           >
                             {t}
                           </span>
@@ -511,7 +511,7 @@ const DoctorPortalPage: React.FC = () => {
                   )}
               </div>
             ) : (
-              <div className="p-4 bg-slate-50 rounded-2xl text-xs text-slate-500 text-center">
+              <div className="p-4 bg-[rgb(var(--app-ground))] rounded-lg text-[0.8125rem] text-[rgb(var(--ink-soft))] text-center">
                 No diagnostic snapshot was attached to this consultation.
               </div>
             )}
@@ -519,14 +519,14 @@ const DoctorPortalPage: React.FC = () => {
             {/* Section 3: Physician Clinical Action Form */}
             <form onSubmit={handleSubmitReview} className="space-y-4 pt-3 border-t border-slate-100">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-teal-700" />
-                <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4 text-[rgb(var(--ink))]" />
+                <h4 className="text-[0.8125rem] font-bold text-slate-800">
                   Physician Assessment & Treatment Orders
                 </h4>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1">
                   Clinical Observations & Diagnostic Verification
                 </label>
                 <textarea
@@ -534,13 +534,13 @@ const DoctorPortalPage: React.FC = () => {
                   value={doctorNotes}
                   onChange={(e) => setDoctorNotes(e.target.value)}
                   placeholder="Record differential diagnosis impressions, recommended lab tests (e.g. CBC, chest X-ray, spirometry), or lifestyle guidance..."
-                  className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10 text-slate-900"
+                  className="w-full px-3.5 py-2.5 text-[0.8125rem] bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-2 focus:ring-[rgb(var(--app-border))]/10 text-slate-900"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1">
                   Prescription / Therapy Instructions (Optional)
                 </label>
                 <input
@@ -548,7 +548,7 @@ const DoctorPortalPage: React.FC = () => {
                   value={prescriptions}
                   onChange={(e) => setPrescriptions(e.target.value)}
                   placeholder="e.g., Budesonide 200mcg BID for 10 days; Paracetamol 500mg PRN"
-                  className="w-full px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10 text-slate-900"
+                  className="w-full px-3.5 py-2 text-[0.8125rem] bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-2 focus:ring-[rgb(var(--app-border))]/10 text-slate-900"
                 />
               </div>
 
@@ -556,9 +556,9 @@ const DoctorPortalPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleExportConsultationPDF(selectedConsultation)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-200 text-slate-700 text-[0.8125rem] font-semibold hover:bg-[rgb(var(--app-ground))]"
                 >
-                  <Download className="w-3.5 h-3.5 text-teal-700" />
+                  <Download className="w-3.5 h-3.5 text-[rgb(var(--ink))]" />
                   <span>Preview PDF</span>
                 </button>
 
@@ -566,7 +566,7 @@ const DoctorPortalPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setSelectedConsultation(null)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 text-xs font-semibold hover:bg-slate-50"
+                    className="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-[0.8125rem] font-semibold hover:bg-[rgb(var(--app-ground))]"
                   >
                     Cancel
                   </button>
@@ -574,7 +574,7 @@ const DoctorPortalPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white text-xs font-bold rounded-xl shadow-md shadow-teal-600/20 active:scale-[0.99] transition-all disabled:opacity-50"
+                    className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] flex items-center gap-2 px-5 py-2 text-white text-[0.8125rem] font-bold rounded-lg active:scale-[0.99] transition-colors disabled:opacity-50"
                   >
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>{isSubmitting ? 'Signing Review...' : 'Sign & Complete Review'}</span>

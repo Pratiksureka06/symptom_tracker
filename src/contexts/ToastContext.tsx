@@ -1,4 +1,6 @@
 import React, { createContext, useState, useContext, useCallback, ReactNode } from 'react';
+import { Check, X, AlertTriangle, Info } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 // Toast types
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
@@ -23,11 +25,14 @@ const ToastContext = createContext<ToastContextType>({
 });
 
 // Toast colors and icons
-const toastStyles: Record<ToastType, { bg: string; border: string; text: string; icon: string }> = {
-  success: { bg: 'bg-emerald-50', border: 'border-emerald-400', text: 'text-emerald-800', icon: '✓' },
-  error: { bg: 'bg-red-50', border: 'border-red-400', text: 'text-red-800', icon: '✕' },
-  warning: { bg: 'bg-amber-50', border: 'border-amber-400', text: 'text-amber-800', icon: '⚠' },
-  info: { bg: 'bg-blue-50', border: 'border-blue-400', text: 'text-blue-800', icon: 'ℹ' },
+const toastStyles: Record<
+  ToastType,
+  { bg: string; border: string; text: string; Icon: LucideIcon }
+> = {
+  success: { bg: 'bg-[rgb(var(--app-raised))]', border: 'border-[rgb(var(--app-border))]', text: 'text-[rgb(var(--ink))]', Icon: Check },
+  error: { bg: 'bg-red-50', border: 'border-red-400', text: 'text-red-800', Icon: X },
+  warning: { bg: 'bg-amber-50', border: 'border-amber-400', text: 'text-amber-800', Icon: AlertTriangle },
+  info: { bg: 'bg-blue-50', border: 'border-blue-400', text: 'text-blue-800', Icon: Info },
 };
 
 // Toast Component
@@ -36,10 +41,10 @@ const ToastItem: React.FC<{ toast: Toast; onRemove: (id: string) => void }> = ({
 
   return (
     <div
-      className={`flex items-center gap-3 px-4 py-3 rounded-lg border-l-4 shadow-lg ${style.bg} ${style.border} ${style.text} animate-slide-in min-w-[300px] max-w-[450px]`}
+      className={`flex items-center gap-3 px-4 py-3 rounded-lg border-l-4 ${style.bg} ${style.border} ${style.text} animate-slide-in min-w-[300px] max-w-[450px]`}
       role="alert"
     >
-      <span className="text-lg font-bold flex-shrink-0">{style.icon}</span>
+      <style.Icon className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
       <p className="text-sm font-medium flex-grow">{toast.message}</p>
       <button
         onClick={() => onRemove(toast.id)}

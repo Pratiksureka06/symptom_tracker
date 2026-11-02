@@ -130,37 +130,37 @@ const SymptomSelector: React.FC = () => {
   };
 
   return (
-    <div className="glass-card rounded-xl p-5 border border-slate-200 shadow-xs space-y-5">
+    <div className="app-panel rounded-lg p-5 border border-slate-200 space-y-5">
       
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
         <div>
           <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <Filter className="h-4 w-4 text-teal-700" />
-            Clinical Symptom Intake
+            <Filter className="h-4 w-4 text-[rgb(var(--ink))]" />
+            Tell us what hurts
           </h2>
-          <p className="text-xs text-slate-500">Filter by anatomical domain or search from 377 medical symptoms</p>
+          <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">Search 377 symptoms, or narrow the list to one part of the body first</p>
         </div>
-        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200/60">
+        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border border-[rgb(var(--app-border))]/60">
           Step 1 of 2
         </span>
       </div>
 
       {/* Anatomical Domain Category Chips */}
       <div>
-        <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-          Anatomical Domain Filter
+        <label className="block text-[11px] font-bold text-[rgb(var(--ink-soft))] mb-2">
+          Part of the body
         </label>
         <div className="flex flex-wrap gap-1.5">
           {DOMAINS.map(domain => (
             <button
               key={domain.id}
               onClick={() => setActiveDomain(domain.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                activeDomain === domain.id
-                  ? 'bg-teal-700 text-white font-semibold shadow-xs'
-                  : 'bg-white hover:bg-slate-100 border border-slate-200 text-slate-700'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-[0.8125rem] font-medium transition-colors ${
+ activeDomain === domain.id
+ ? 'bg-[rgb(var(--ink))] text-white font-semibold '
+ : 'bg-white hover:bg-[rgb(var(--app-raised))] border border-slate-200 text-slate-700'
+ }`}
             >
               {domain.label}
             </button>
@@ -172,11 +172,11 @@ const SymptomSelector: React.FC = () => {
       <div>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-slate-500" />
+            <Search className="h-4 w-4 text-[rgb(var(--ink-soft))]" />
           </div>
           <input
             type="text"
-            className="bg-slate-50/70 border border-slate-200 text-slate-900 text-xs rounded-xl block w-full pl-9 pr-8 py-2.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:bg-white transition-all shadow-2xs"
+            className="bg-[rgb(var(--app-ground))]/70 border border-slate-200 text-slate-900 text-[0.8125rem] rounded-lg block w-full pl-9 pr-8 py-2.5 focus:ring-2 focus:ring-[rgb(var(--app-border))] focus:border-[rgb(var(--app-border))] focus:bg-white transition-colors"
             placeholder="Search symptoms (e.g., dry cough, thoracic pain, vertigo, shortness of breath)..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -185,7 +185,7 @@ const SymptomSelector: React.FC = () => {
           {searchTerm && (
             <button
               onClick={() => setSearchTerm('')}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-600"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-[rgb(var(--ink-soft))] hover:text-slate-600"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -194,8 +194,8 @@ const SymptomSelector: React.FC = () => {
 
         {/* Quick Add Popular Tags */}
         <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
-          <span className="text-[11px] font-semibold text-slate-500 mr-1 flex items-center gap-1">
-            <Sparkles className="h-3 w-3 text-teal-700" /> Quick Add:
+          <span className="text-[11px] font-semibold text-[rgb(var(--ink-soft))] mr-1 flex items-center gap-1">
+            <Sparkles className="h-3 w-3 text-[rgb(var(--ink))]" /> Common ones:
           </span>
           {POPULAR_TAGS.map(tag => {
             const added = selectedSymptoms.some(s => s.name.toLowerCase() === tag.toLowerCase());
@@ -204,13 +204,13 @@ const SymptomSelector: React.FC = () => {
                 key={tag}
                 onClick={() => handleQuickAdd(tag)}
                 disabled={added}
-                className={`text-[11px] px-2 py-0.5 rounded-md border transition-all ${
-                  added
-                    ? 'bg-teal-50 text-teal-700 border-teal-200 font-semibold cursor-default'
-                    : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300'
-                }`}
+                className={`text-[11px] px-2 py-0.5 rounded-md border transition-colors ${
+ added
+ ? 'bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border-[rgb(var(--app-border))] font-semibold cursor-default'
+ : 'bg-white hover:bg-[rgb(var(--app-ground))] text-slate-600 border-slate-200 hover:border-slate-300'
+ }`}
               >
-                {added ? `✓ ${tag}` : `+ ${tag}`}
+                {added ? ` ${tag}` : `+ ${tag}`}
               </button>
             );
           })}
@@ -219,18 +219,18 @@ const SymptomSelector: React.FC = () => {
 
       {/* Selected Symptoms Badges */}
       {selectedSymptoms.length > 0 && (
-        <div className="p-3 bg-teal-50/50 rounded-xl border border-teal-100">
+        <div className="p-3 bg-[rgb(var(--app-raised))]/50 rounded-lg border border-teal-100">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xs font-bold text-teal-900 flex items-center gap-1.5">
+            <h3 className="text-[0.8125rem] font-bold text-[rgb(var(--ink))] flex items-center gap-1.5">
               <span>Active Intake ({selectedSymptoms.length})</span>
             </h3>
-            <span className="text-[11px] text-teal-700">Ready for diagnostic scoring</span>
+            <span className="text-[11px] text-[rgb(var(--ink))]">Ready for diagnostic scoring</span>
           </div>
           <div className="flex flex-wrap gap-1.5">
             {selectedSymptoms.map(symptom => (
               <div 
                 key={symptom.id} 
-                className="bg-white border border-teal-200 text-teal-800 px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center shadow-2xs group"
+                className="bg-white border border-[rgb(var(--app-border))] text-[rgb(var(--ink))] px-2.5 py-1 rounded-lg text-[0.8125rem] font-semibold flex items-center group"
               >
                 <span>{symptom.name}</span>
                 <button
@@ -249,10 +249,10 @@ const SymptomSelector: React.FC = () => {
       {/* Symptom Selection Grid */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-            {searchTerm.trim() === '' ? 'Common & Category Symptoms' : 'Search Results'}
+          <h3 className="text-[0.8125rem] font-bold text-[rgb(var(--ink-soft))]">
+            {searchTerm.trim() === '' ? 'Symptoms' : 'Search Results'}
           </h3>
-          <span className="text-[11px] text-slate-500">
+          <span className="text-[11px] text-[rgb(var(--ink-soft))]">
             Showing {filteredSymptoms.length} symptoms
           </span>
         </div>
@@ -277,11 +277,11 @@ const SymptomSelector: React.FC = () => {
         {/* Error state */}
         {loadError && !isLoading && (
           <div role="alert" className="rounded-card border border-rose-200 bg-rose-50 p-4 text-center">
-            <p className="mb-2 text-xs text-rose-700">Failed to connect to backend engine.</p>
+            <p className="mb-2 text-[0.8125rem] text-rose-700">Failed to connect to backend engine.</p>
             <button
               type="button"
               onClick={fetchData}
-              className="rounded-md px-2 py-1 text-xs font-bold text-primary transition-colors hover:bg-primary-soft hover:underline"
+              className="rounded-md px-2 py-1 text-[0.8125rem] font-bold text-primary transition-colors hover:bg-primary-soft hover:underline"
             >
               Retry Connection
             </button>
@@ -299,23 +299,23 @@ const SymptomSelector: React.FC = () => {
                     key={symptom.id}
                     onClick={() => handleAddSymptom(symptom)}
                     disabled={selected}
-                    className={`flex items-center justify-between px-3 py-2 rounded-lg border text-left text-xs transition-all ${
-                      selected
-                        ? 'bg-teal-50 border-teal-200 text-teal-800 font-semibold cursor-default'
-                        : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-700'
-                    }`}
+                    className={`flex items-center justify-between px-3 py-2 rounded-lg border text-left text-[0.8125rem] transition-colors ${
+ selected
+ ? 'bg-[rgb(var(--app-raised))] border-[rgb(var(--app-border))] text-[rgb(var(--ink))] font-semibold cursor-default'
+ : 'border-slate-200 bg-white hover:bg-[rgb(var(--app-ground))] hover:border-slate-300 text-slate-700'
+ }`}
                   >
                     <span className="truncate pr-2">{symptom.name}</span>
                     {selected ? (
-                      <Check className="h-3.5 w-3.5 text-teal-700 shrink-0" />
+                      <Check className="h-3.5 w-3.5 text-[rgb(var(--ink))] shrink-0" />
                     ) : (
-                      <Plus className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                      <Plus className="h-3.5 w-3.5 text-[rgb(var(--ink-soft))] shrink-0" />
                     )}
                   </button>
                 );
               })
             ) : (
-              <p className="text-slate-500 text-xs col-span-2 py-4 text-center">
+              <p className="text-[rgb(var(--ink-soft))] text-[0.8125rem] col-span-2 py-4 text-center">
                 No symptoms match the current search or domain filter.
               </p>
             )}

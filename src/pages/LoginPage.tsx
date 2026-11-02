@@ -38,32 +38,32 @@ const LoginPage: React.FC = () => {
       'success',
       demoRole === 'doctor'
         ? `Logged in as Dr. Thorne (${specialty || 'Pulmonologist'})`
-        : 'Logged in as Demo Patient (John Doe)'
+        : 'Signed in as the demo patient, Ananya Rao'
     );
     navigate(demoRole === 'doctor' ? '/doctor-portal' : '/');
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-b from-slate-50 via-teal-50/25 to-slate-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+    <div className="min-h-[calc(100vh-4rem)] py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
       <div className="max-w-md w-full mx-auto space-y-6">
         {/* Brand Header */}
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white shadow-lg shadow-teal-600/30 mb-4">
+          <div className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] inline-flex items-center justify-center w-14 h-14 rounded-lg text-white mb-4">
             <ShieldCheck className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-            Sign In to MediScan
-          </h2>
-          <p className="mt-1 text-sm text-slate-500">
-            Access intelligent diagnostic tracking & clinical review portal
+          <h1 className="app-title">
+            Sign in to MediScan
+          </h1>
+          <p className="mt-1 text-sm text-[rgb(var(--ink-soft))]">
+            Your checks and history, on whichever device you use next.
           </p>
         </div>
 
         {/* 1-Click Demo Logins Banner */}
-        <div className="glass-card bg-teal-50/70 border border-teal-200/80 rounded-2xl p-4 shadow-sm">
+        <div className="app-panel bg-[rgb(var(--app-raised))]/70 border border-[rgb(var(--app-border))]/80 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2.5">
-            <Sparkles className="w-4 h-4 text-teal-700" />
-            <span className="text-xs font-bold text-teal-900 uppercase tracking-wider">
+            <Sparkles className="w-4 h-4 text-[rgb(var(--ink))]" />
+            <span className="text-[0.8125rem] font-bold text-[rgb(var(--ink))]">
               1-Click Academic / Demo Evaluation
             </span>
           </div>
@@ -71,45 +71,45 @@ const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleQuickDemo('patient')}
-              className="px-3 py-2 rounded-xl bg-white border border-teal-200 hover:border-teal-400 hover:bg-teal-50/50 text-xs font-semibold text-slate-800 text-left transition-all shadow-sm flex items-center gap-2"
+              className="px-3 py-2 rounded-lg bg-white border border-[rgb(var(--app-border))] hover:border-[rgb(var(--app-border))] hover:bg-[rgb(var(--app-raised))]/50 text-[0.8125rem] font-semibold text-slate-800 text-left transition-colors flex items-center gap-2"
             >
-              <div className="w-6 h-6 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700 shrink-0 font-bold">
+              <div className="w-6 h-6 rounded-lg bg-[rgb(var(--app-raised))] flex items-center justify-center text-[rgb(var(--ink))] shrink-0 font-bold">
                 P
               </div>
               <div className="truncate">
                 <p className="font-semibold truncate">Patient Demo</p>
-                <p className="text-[10px] text-slate-500">John Doe (42M)</p>
+                <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">Ananya Rao, 42</p>
               </div>
             </button>
 
             <button
               type="button"
               onClick={() => handleQuickDemo('doctor', 'Pulmonologist')}
-              className="px-3 py-2 rounded-xl bg-white border border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50/50 text-xs font-semibold text-slate-800 text-left transition-all shadow-sm flex items-center gap-2"
+              className="px-3 py-2 rounded-lg bg-white border border-[rgb(var(--app-border))] hover:border-[rgb(var(--app-border))] hover:bg-[rgb(var(--app-raised))]/50 text-[0.8125rem] font-semibold text-slate-800 text-left transition-colors flex items-center gap-2"
             >
-              <div className="w-6 h-6 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0 font-bold">
+              <div className="w-6 h-6 rounded-lg bg-[rgb(var(--app-raised))] flex items-center justify-center text-[rgb(var(--ink))] shrink-0 font-bold">
                 Dr
               </div>
               <div className="truncate">
                 <p className="font-semibold truncate">Dr. Thorne, MD</p>
-                <p className="text-[10px] text-slate-500">Pulmonologist</p>
+                <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">Pulmonologist</p>
               </div>
             </button>
           </div>
         </div>
 
         {/* Main Login Card */}
-        <div className="glass-card bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xl shadow-teal-900/5">
+        <div className="app-panel bg-white/95 p-6 sm:p-8 rounded-lg border border-slate-200/80">
           {/* Role Toggle Tabs */}
-          <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-100/90 rounded-2xl mb-6">
+          <div className="grid grid-cols-2 gap-1.5 p-1 bg-[rgb(var(--app-raised))]/90 rounded-lg mb-6">
             <button
               type="button"
               onClick={() => setRole('patient')}
-              className={`flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-xl transition-all ${
-                role === 'patient'
-                  ? 'bg-white text-teal-800 shadow-sm border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              className={`flex items-center justify-center gap-2 py-2 text-[0.8125rem] font-bold rounded-lg transition-colors ${
+ role === 'patient'
+ ? 'bg-white text-[rgb(var(--ink))] border border-slate-200/60'
+ : 'text-slate-600 hover:text-slate-900'
+ }`}
             >
               <User className="w-4 h-4" />
               <span>Patient Portal</span>
@@ -118,11 +118,11 @@ const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setRole('doctor')}
-              className={`flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-xl transition-all ${
-                role === 'doctor'
-                  ? 'bg-white text-teal-800 shadow-sm border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              className={`flex items-center justify-center gap-2 py-2 text-[0.8125rem] font-bold rounded-lg transition-colors ${
+ role === 'doctor'
+ ? 'bg-white text-[rgb(var(--ink))] border border-slate-200/60'
+ : 'text-slate-600 hover:text-slate-900'
+ }`}
             >
               <Stethoscope className="w-4 h-4" />
               <span>Doctor Portal</span>
@@ -131,34 +131,34 @@ const LoginPage: React.FC = () => {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                 {role === 'doctor' ? 'Physician Email' : 'Patient Email'}
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Mail className="w-4 h-4 text-[rgb(var(--ink-soft))] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={role === 'doctor' ? 'dr.thorne@mediscan.org' : 'patient@example.com'}
-                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                 Password
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Lock className="w-4 h-4 text-[rgb(var(--ink-soft))] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                 />
               </div>
             </div>
@@ -167,7 +167,7 @@ const LoginPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-sm shadow-md shadow-teal-600/25 active:scale-[0.99] transition-all disabled:opacity-50"
+                className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-white font-bold text-sm active:scale-[0.99] transition-colors disabled:opacity-50"
               >
                 <span>{isLoading ? 'Signing In...' : `Sign In as ${role === 'doctor' ? 'Doctor' : 'Patient'}`}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -176,9 +176,9 @@ const LoginPage: React.FC = () => {
           </form>
 
           <div className="mt-6 pt-4 border-t border-slate-100 text-center">
-            <p className="text-xs text-slate-500">
+            <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">
               Don't have an account?{' '}
-              <Link to="/register" className="font-bold text-teal-700 hover:text-teal-700">
+              <Link to="/register" className="font-bold text-[rgb(var(--ink))] hover:text-[rgb(var(--ink))]">
                 Register as Patient or Doctor
               </Link>
             </p>

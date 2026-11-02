@@ -27,7 +27,7 @@ function App() {
           <SymptomProvider>
             <MedicationProvider>
               <Router>
-                <div className="flex flex-col min-h-screen bg-surface-sunken">
+                <div className="flex flex-col min-h-[100svh] bg-surface-sunken">
                   <a href="#main-content" className="skip-link">
                     Skip to main content
                   </a>

@@ -69,36 +69,36 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onSymptomsDetected }) => {
   };
 
   return (
-    <div className="glass-card rounded-xl p-5 mt-5 border border-slate-200 shadow-xs transition-all">
+    <div className="app-panel rounded-lg p-5 mt-5 border border-slate-200 transition-colors">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] flex items-center justify-center">
             <Volume2 className="h-4 w-4" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
               Clinical Voice Dictation
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-teal-100/70 text-teal-800">
+              <span className="text-[0.8125rem] uppercase font-bold px-1.5 py-0.5 rounded bg-[rgb(var(--app-raised))]/70 text-[rgb(var(--ink))]">
                 AI Speech
               </span>
             </h3>
-            <p className="text-[11px] text-slate-500">Speak naturally to extract symptoms automatically</p>
+            <p className="text-[11px] text-[rgb(var(--ink-soft))]">Speak naturally to extract symptoms automatically</p>
           </div>
         </div>
         
         <button
           onClick={isListening ? stopListening : startListening}
           disabled={processing}
-          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all duration-200 shadow-sm ${
-            isListening 
-              ? 'bg-rose-500 hover:bg-rose-600 text-white shadow-rose-500/25 ring-4 ring-rose-500/20' 
-              : 'bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white shadow-teal-600/20 active:scale-95'
-          } disabled:opacity-50 disabled:cursor-not-allowed`}
+          className={`px-3.5 py-2 rounded-lg text-[0.8125rem] font-semibold flex items-center gap-2 transition-colors duration-200 ${
+ isListening 
+ ? 'bg-red-700 hover:bg-red-800 text-white' 
+ : 'bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] text-white active:scale-95'
+ } disabled:opacity-50 disabled:cursor-not-allowed`}
           aria-label={isListening ? 'Stop listening' : 'Start listening'}
         >
           {isListening ? (
             <>
-              <MicOff className="h-4 w-4 animate-pulse" />
+              <MicOff className="h-4 w-4" />
               <span>Stop Recording</span>
             </>
           ) : (
@@ -111,61 +111,61 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onSymptomsDetected }) => {
       </div>
       
       {error && (
-        <div className="bg-rose-50 text-rose-700 border border-rose-200 p-3 rounded-lg text-xs mb-3">
+        <div className="bg-rose-50 text-rose-700 border border-rose-200 p-3 rounded-lg text-[0.8125rem] mb-3">
           {error}
         </div>
       )}
 
       {/* Waveform Indicator when active */}
       {isListening && (
-        <div className="flex items-center justify-center gap-1.5 py-3 mb-2 bg-teal-50/60 rounded-lg border border-teal-100">
-          <span className="text-xs font-medium text-teal-800 mr-2">Recording active:</span>
+        <div className="flex items-center justify-center gap-1.5 py-3 mb-2 bg-[rgb(var(--app-raised))]/60 rounded-lg border border-teal-100">
+          <span className="text-[0.8125rem] font-medium text-[rgb(var(--ink))] mr-2">Recording active:</span>
           <div className="flex items-center gap-1 h-6">
             <span className="w-1 bg-teal-500 rounded-full waveform-bar" style={{ height: '8px' }}></span>
-            <span className="w-1 bg-teal-600 rounded-full waveform-bar" style={{ height: '18px' }}></span>
+            <span className="w-1 bg-[rgb(var(--ink))] rounded-full waveform-bar" style={{ height: '18px' }}></span>
             <span className="w-1 bg-teal-500 rounded-full waveform-bar" style={{ height: '12px' }}></span>
-            <span className="w-1 bg-teal-700 rounded-full waveform-bar" style={{ height: '22px' }}></span>
+            <span className="w-1 bg-[rgb(var(--ink))] rounded-full waveform-bar" style={{ height: '22px' }}></span>
             <span className="w-1 bg-teal-500 rounded-full waveform-bar" style={{ height: '14px' }}></span>
-            <span className="w-1 bg-teal-600 rounded-full waveform-bar" style={{ height: '20px' }}></span>
+            <span className="w-1 bg-[rgb(var(--ink))] rounded-full waveform-bar" style={{ height: '20px' }}></span>
             <span className="w-1 bg-teal-400 rounded-full waveform-bar" style={{ height: '9px' }}></span>
           </div>
         </div>
       )}
       
-      <div className={`border rounded-xl p-3.5 min-h-[72px] transition-colors ${
-        isListening ? 'border-teal-400 bg-teal-50/30' : 'border-slate-200 bg-slate-50/50'
-      }`}>
+      <div className={`border rounded-lg p-3.5 min-h-[72px] transition-colors ${
+ isListening ? 'border-[rgb(var(--app-border))] bg-[rgb(var(--app-raised))]/30' : 'border-slate-200 bg-[rgb(var(--app-ground))]/50'
+ }`}>
         {isListening && !transcript && (
-          <p className="text-xs text-teal-700 italic animate-pulse">Listening to patient narration...</p>
+          <p className="text-[0.8125rem] text-[rgb(var(--ink))] italic">Listening to patient narration...</p>
         )}
-        {transcript && <p className="text-xs font-medium text-slate-800 leading-relaxed">"{transcript}"</p>}
+        {transcript && <p className="text-[0.8125rem] font-medium text-slate-800 leading-relaxed">"{transcript}"</p>}
         {!isListening && !transcript && (
-          <p className="text-xs text-slate-500">
+          <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">
             Click "Start Dictation" and describe your condition (e.g. "I have a dry cough, low fever, and fatigue for 3 days").
           </p>
         )}
       </div>
       
       {processing && (
-        <div className="mt-3 text-teal-700 text-xs font-medium flex items-center">
-          <div className="animate-spin rounded-full h-3.5 w-3.5 border-b-2 border-teal-600 mr-2"></div>
+        <div className="mt-3 text-[rgb(var(--ink))] text-[0.8125rem] font-medium flex items-center">
+          <div className="animate-spin rounded-full h-3.5 w-3.5 border-b-2 border-[rgb(var(--app-border))] mr-2"></div>
           AI parsing speech into clinical symptom entities...
         </div>
       )}
       
       {detectedSymptoms.length > 0 && !processing && (
         <div className="mt-3 pt-3 border-t border-slate-100">
-          <h4 className="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1">
-            <Sparkles className="h-3.5 w-3.5 text-teal-700" />
+          <h4 className="text-[0.8125rem] font-bold text-slate-700 mb-2 flex items-center gap-1">
+            <Sparkles className="h-3.5 w-3.5 text-[rgb(var(--ink))]" />
             Extracted Clinical Symptoms:
           </h4>
           <div className="flex flex-wrap gap-1.5">
             {detectedSymptoms.map(symptom => (
               <div 
                 key={symptom.id} 
-                className="bg-emerald-50 border border-emerald-200/80 text-emerald-800 px-2.5 py-1 rounded-lg text-xs font-medium flex items-center shadow-2xs"
+                className="bg-[rgb(var(--app-raised))] border border-[rgb(var(--app-border))]/80 text-[rgb(var(--ink))] px-2.5 py-1 rounded-lg text-[0.8125rem] font-medium flex items-center"
               >
-                <Check className="h-3 w-3 mr-1 text-emerald-600" />
+                <Check className="h-3 w-3 mr-1 text-[rgb(var(--ink))]" />
                 {symptom.name}
               </div>
             ))}

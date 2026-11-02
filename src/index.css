@@ -128,21 +128,6 @@
 }
 
 @layer components {
-  /* Glassmorphism classes from the MediScan Stitch design system. */
-  .glass-panel {
-    background: rgb(var(--color-surface) / 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgb(var(--color-hairline));
-  }
-
-  .glass-card {
-    background: rgb(var(--color-surface) / 0.94);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgb(var(--color-hairline));
-  }
-
   /* Skip link — first tab stop, visible only once focused. Fixed and above the
      sticky header (which is z-50), or it would be painted over. */
   .skip-link {
@@ -161,12 +146,7 @@
   .skeleton::after {
     content: '';
     @apply absolute inset-0 -translate-x-full animate-shimmer;
-    background-image: linear-gradient(
-      90deg,
-      transparent,
-      rgb(255 255 255 / 0.6),
-      transparent
-    );
+    background-color: rgb(255 255 255 / 0.55);
   }
 }
 
@@ -246,5 +226,114 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   APP SCREENS · style "Achromatic ledger" (seed 829925411).
+
+   The screens people work in follow different rules from the home page: 1px
+   borders, pills inside rows and small labels are correct here, and display
+   type is not. The chrome carries no colour at all. The only hue on a screen
+   is the urgency level on a result and the one chart hue on the main series,
+   which keeps coloured pixels under about 1%.
+--------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    --app-ground: 241 241 238;
+    --app-surface: 255 255 255;
+    --app-raised: 250 250 249;
+    --app-border: 227 227 223;
+    --app-rule: 235 235 231;
+    --app-control: 229 229 226;
+    --app-chart: 29 95 191;
+  }
+}
+
+@layer components {
+  /* A panel: a border or a tone step, never both, and never a shadow. */
+  .app-panel {
+    background: rgb(var(--app-surface));
+    border: 1px solid rgb(var(--app-border));
+    border-radius: 0.5rem;
+  }
+
+  .app-panel-quiet {
+    background: rgb(var(--app-raised));
+    border-radius: 0.5rem;
+  }
+
+  /* A noun title, 18-32px. Never a landing-page heading on a working screen. */
+  .app-title {
+    font-size: 1.5rem;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: rgb(var(--ink));
+  }
+
+  .app-section-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--ink));
+  }
+
+  /* Sentence case at a readable size, never tracked uppercase. */
+  .app-label {
+    font-size: 0.8125rem;
+    color: rgb(var(--ink-soft));
+  }
+
+  .app-rule {
+    border-top: 1px solid rgb(var(--app-rule));
+  }
+
+  .app-input {
+    width: 100%;
+    background: rgb(var(--app-surface));
+    border: 1px solid rgb(var(--app-border));
+    border-radius: 0.375rem;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.9375rem;
+    color: rgb(var(--ink));
+  }
+
+  /* Near-black primary, grey secondary. No brand fill on chrome. */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgb(var(--ink));
+    color: rgb(var(--paper));
+    border-radius: 0.375rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+  .btn-primary:hover { background: rgb(var(--field-low)); }
+  .btn-primary:disabled { background: rgb(var(--app-control)); color: rgb(var(--ink-soft)); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgb(var(--app-control));
+    color: rgb(var(--ink));
+    border-radius: 0.375rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+  .btn-secondary:hover { background: rgb(var(--app-border)); }
+
+  /* Figures line up as columns. */
+  .app-figure {
+    font-variant-numeric: tabular-nums;
+    font-size: 1.75rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: rgb(var(--ink));
   }
 }

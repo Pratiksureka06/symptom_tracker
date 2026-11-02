@@ -157,13 +157,13 @@ export const SEED_DOCTORS: DoctorProfile[] = [
 
 export const DEMO_PATIENT: PatientProfile = {
   id: 'patient-demo-1',
-  name: 'John Doe',
+  name: 'Ananya Rao',
   email: 'john.doe@patient.mediscan.org',
   role: 'patient',
   age: 42,
   gender: 'Male',
   existingConditions: ['Hypertension (Mild)', 'Seasonal Allergic Rhinitis'],
-  emergencyContact: '+1 (555) 234-5678',
+  emergencyContact: '+91 98204 11732',
 };
 
 const AUTH_USER_KEY = 'mediscan_auth_user';
@@ -177,7 +177,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
     try {
       const stored = localStorage.getItem(AUTH_USER_KEY);
-      return stored ? JSON.parse(stored) : DEMO_PATIENT; // Default to demo patient for seamless immediate experience
+      return stored ? JSON.parse(stored) : DEMO_PATIENT; // Default to demo patient for uninterrupted immediate experience
     } catch {
       return DEMO_PATIENT;
     }

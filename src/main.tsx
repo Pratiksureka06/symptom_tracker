@@ -9,10 +9,10 @@ if ('serviceWorker' in navigator && (import.meta as any).env?.PROD) {
     navigator.serviceWorker
       .register('/sw.js')
       .then((reg) => {
-        console.log('✅ MediScan Service Worker registered:', reg.scope);
+        console.log('MediScan service worker registered:', reg.scope);
       })
       .catch((err) => {
-        console.warn('⚠️ Service Worker registration error:', err);
+        console.warn('MediScan service worker failed to register:', err);
       });
   });
 }

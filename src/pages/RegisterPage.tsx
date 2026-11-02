@@ -84,33 +84,33 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-b from-slate-50 via-teal-50/25 to-slate-50 py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-4rem)] py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-xl w-full mx-auto space-y-6">
         {/* Header */}
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white shadow-md shadow-teal-600/25 mb-3">
+          <div className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] inline-flex items-center justify-center w-12 h-12 rounded-lg text-white mb-3">
             <ShieldCheck className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-            Create Your MediScan Account
-          </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="app-title">
+            Create your MediScan account
+          </h1>
+          <p className="mt-1 text-sm text-[rgb(var(--ink-soft))]">
             Join as a patient to track health or as a licensed doctor to review clinical assessments
           </p>
         </div>
 
         {/* Form Container */}
-        <div className="glass-card bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xl shadow-teal-900/5">
+        <div className="app-panel bg-white/95 p-6 sm:p-8 rounded-lg border border-slate-200/80">
           {/* Role Switcher */}
-          <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-100/90 rounded-2xl mb-6">
+          <div className="grid grid-cols-2 gap-1.5 p-1 bg-[rgb(var(--app-raised))]/90 rounded-lg mb-6">
             <button
               type="button"
               onClick={() => setRole('patient')}
-              className={`flex items-center justify-center gap-2 py-2.5 text-xs font-bold rounded-xl transition-all ${
-                role === 'patient'
-                  ? 'bg-white text-teal-800 shadow-sm border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              className={`flex items-center justify-center gap-2 py-2.5 text-[0.8125rem] font-bold rounded-lg transition-colors ${
+ role === 'patient'
+ ? 'bg-white text-[rgb(var(--ink))] border border-slate-200/60'
+ : 'text-slate-600 hover:text-slate-900'
+ }`}
             >
               <User className="w-4 h-4" />
               <span>I am a Patient</span>
@@ -119,11 +119,11 @@ const RegisterPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setRole('doctor')}
-              className={`flex items-center justify-center gap-2 py-2.5 text-xs font-bold rounded-xl transition-all ${
-                role === 'doctor'
-                  ? 'bg-white text-teal-800 shadow-sm border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              className={`flex items-center justify-center gap-2 py-2.5 text-[0.8125rem] font-bold rounded-lg transition-colors ${
+ role === 'doctor'
+ ? 'bg-white text-[rgb(var(--ink))] border border-slate-200/60'
+ : 'text-slate-600 hover:text-slate-900'
+ }`}
             >
               <Stethoscope className="w-4 h-4" />
               <span>I am a Doctor</span>
@@ -134,7 +134,7 @@ const RegisterPage: React.FC = () => {
             {/* Common Fields */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                   Full Name
                 </label>
                 <input
@@ -142,13 +142,13 @@ const RegisterPage: React.FC = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={role === 'doctor' ? 'e.g., Aris Thorne' : 'e.g., Jane Smith'}
-                  className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                  className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                   Email Address
                 </label>
                 <input
@@ -156,14 +156,14 @@ const RegisterPage: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={role === 'doctor' ? 'doctor@hospital.org' : 'patient@gmail.com'}
-                  className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                  className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                 Password
               </label>
               <input
@@ -171,25 +171,25 @@ const RegisterPage: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a secure password"
-                className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
               />
             </div>
 
             {/* Doctor-Specific Fields */}
             {role === 'doctor' ? (
               <div className="space-y-4 pt-2 border-t border-slate-100">
-                <div className="p-3 bg-teal-50/60 rounded-xl border border-teal-100 text-xs text-teal-800">
+                <div className="p-3 bg-[rgb(var(--app-raised))]/60 rounded-lg border border-teal-100 text-[0.8125rem] text-[rgb(var(--ink))]">
                   <strong>Physician Verification:</strong> Enter your medical credentials to receive clinical consultations routed by our Two-Stage Bayesian AI.
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                     Medical Specialty
                   </label>
                   <select
                     value={specialty}
                     onChange={(e) => setSpecialty(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                    className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                   >
                     {MEDICAL_SPECIALTIES.map((spec) => (
                       <option key={spec} value={spec}>
@@ -201,7 +201,7 @@ const RegisterPage: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                       Hospital / Clinic Name
                     </label>
                     <input
@@ -209,12 +209,12 @@ const RegisterPage: React.FC = () => {
                       value={hospital}
                       onChange={(e) => setHospital(e.target.value)}
                       placeholder="e.g., Apollo Medical Center"
-                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                      className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                       License / Registration #
                     </label>
                     <input
@@ -222,13 +222,13 @@ const RegisterPage: React.FC = () => {
                       value={licenseNumber}
                       onChange={(e) => setLicenseNumber(e.target.value)}
                       placeholder="e.g., MCI-88421"
-                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                      className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                     Years of Clinical Practice
                   </label>
                   <input
@@ -237,12 +237,12 @@ const RegisterPage: React.FC = () => {
                     max="50"
                     value={experienceYears}
                     onChange={(e) => setExperienceYears(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                    className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                     Professional Bio
                   </label>
                   <textarea
@@ -250,7 +250,7 @@ const RegisterPage: React.FC = () => {
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Brief background of clinical experience and areas of sub-specialization..."
-                    className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                    className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                   />
                 </div>
               </div>
@@ -259,7 +259,7 @@ const RegisterPage: React.FC = () => {
               <div className="space-y-4 pt-2 border-t border-slate-100">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                       Age
                     </label>
                     <input
@@ -268,18 +268,18 @@ const RegisterPage: React.FC = () => {
                       max="120"
                       value={age}
                       onChange={(e) => setAge(e.target.value)}
-                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                      className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                       Gender
                     </label>
                     <select
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
-                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                      className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                     >
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -290,7 +290,7 @@ const RegisterPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                     Pre-Existing Medical Conditions (comma-separated)
                   </label>
                   <input
@@ -298,12 +298,12 @@ const RegisterPage: React.FC = () => {
                     value={existingConditions}
                     onChange={(e) => setExistingConditions(e.target.value)}
                     placeholder="e.g., Asthma, Type 2 Diabetes, Hypertension"
-                    className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                    className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[0.8125rem] font-bold text-slate-700 mb-1.5">
                     Emergency Contact Number
                   </label>
                   <input
@@ -311,7 +311,7 @@ const RegisterPage: React.FC = () => {
                     value={emergencyContact}
                     onChange={(e) => setEmergencyContact(e.target.value)}
                     placeholder="e.g., +1 (555) 019-2834"
-                    className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all text-slate-900"
+                    className="w-full px-3.5 py-2.5 text-sm bg-[rgb(var(--app-ground))] border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-4 focus:ring-[rgb(var(--app-border))]/10 transition-colors text-slate-900"
                   />
                 </div>
               </div>
@@ -321,7 +321,7 @@ const RegisterPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-sm shadow-md shadow-teal-600/25 active:scale-[0.99] transition-all disabled:opacity-50"
+                className="bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-white font-bold text-sm active:scale-[0.99] transition-colors disabled:opacity-50"
               >
                 <span>{isLoading ? 'Creating Account...' : `Complete ${role === 'doctor' ? 'Doctor' : 'Patient'} Registration`}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -330,9 +330,9 @@ const RegisterPage: React.FC = () => {
           </form>
 
           <div className="mt-6 pt-4 border-t border-slate-100 text-center">
-            <p className="text-xs text-slate-500">
+            <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">
               Already registered?{' '}
-              <Link to="/login" className="font-bold text-teal-700 hover:text-teal-700">
+              <Link to="/login" className="font-bold text-[rgb(var(--ink))] hover:text-[rgb(var(--ink))]">
                 Sign in here
               </Link>
             </p>

@@ -169,7 +169,7 @@ const ResultsPage: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         {/* Emergency Warning */}
         {hasEmergencyCondition && (
-          <div className="bg-rose-100 border-l-4 border-rose-500 p-4 mb-6 rounded-md shadow-sm">
+          <div className="bg-rose-100 border-l-4 border-rose-500 p-4 mb-6 rounded-md">
             <div className="flex items-start">
               <AlertCircle className="h-6 w-6 text-rose-500 mr-3 mt-0.5 flex-shrink-0" />
               <div>
@@ -188,7 +188,7 @@ const ResultsPage: React.FC = () => {
           <div>
             <button
               onClick={() => navigate(-1)}
-              className="inline-flex items-center text-teal-700 hover:text-teal-700 text-sm font-medium mb-3"
+              className="inline-flex items-center text-[rgb(var(--ink))] hover:text-[rgb(var(--ink))] text-sm font-medium mb-3"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
@@ -197,11 +197,11 @@ const ResultsPage: React.FC = () => {
             {engine && (
               <span
                 title={fallbackReason ? `Gemini failed, local model used: ${fallbackReason}` : undefined}
-                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ${
-                  engine === 'gemini'
-                    ? 'bg-teal-50 text-teal-800 border border-teal-200'
-                    : 'bg-slate-100 text-slate-600 border border-slate-200'
-                }`}
+                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold ${
+ engine === 'gemini'
+ ? 'bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border border-[rgb(var(--app-border))]'
+ : 'bg-[rgb(var(--app-raised))] text-slate-600 border border-slate-200'
+ }`}
               >
                 <Sparkles className="h-3 w-3" aria-hidden="true" />
                 {engine === 'gemini' ? 'Gemini' : 'Local ML'}
@@ -212,22 +212,22 @@ const ResultsPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2.5 mt-4 md:mt-0">
             <button
               onClick={exportClinicalPDF}
-              className="inline-flex items-center px-3 py-1.5 border border-teal-600/30 bg-teal-50 text-teal-700 rounded-md text-sm font-medium hover:bg-teal-100 transition-colors shadow-sm"
+              className="inline-flex items-center px-3 py-1.5 border border-[rgb(var(--app-border))]/30 bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] rounded-md text-sm font-medium hover:bg-[rgb(var(--app-raised))] transition-colors"
               title="Download formatted Clinical PDF report"
             >
-              <Download className="h-4 w-4 mr-1.5 text-teal-700" />
+              <Download className="h-4 w-4 mr-1.5 text-[rgb(var(--ink))]" />
               Clinical PDF
             </button>
             <button
               onClick={printResults}
-              className="inline-flex items-center px-3 py-1.5 border border-slate-300 rounded-md text-slate-700 text-sm hover:bg-slate-50 transition-colors"
+              className="inline-flex items-center px-3 py-1.5 border border-slate-300 rounded-md text-slate-700 text-sm hover:bg-[rgb(var(--app-ground))] transition-colors"
             >
               <Printer className="h-4 w-4 mr-1.5" />
               Print
             </button>
             <button
               onClick={() => navigate('/symptom-checker')}
-              className="inline-flex items-center px-3 py-1.5 border border-teal-700 rounded-md text-sm text-white bg-teal-700 hover:bg-teal-800 transition-colors shadow-sm"
+              className="inline-flex items-center px-3 py-1.5 border border-[rgb(var(--app-border))] rounded-md text-sm text-white bg-[rgb(var(--ink))] hover:bg-[rgb(var(--ink))] transition-colors"
             >
               <Activity className="h-4 w-4 mr-1.5" />
               New Check
@@ -238,42 +238,42 @@ const ResultsPage: React.FC = () => {
         {/* Gemini was requested but could not answer — say so rather than
             silently presenting the local model's results as the AI's. */}
         {fallbackReason && (
-          <div role="alert" className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <div role="alert" className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
             <p className="text-sm font-semibold text-amber-900">
               Gemini was unavailable — these results come from the local ML model.
             </p>
-            <p className="mt-1 text-xs text-amber-800">{fallbackReason}</p>
+            <p className="mt-1 text-[0.8125rem] text-amber-800">{fallbackReason}</p>
           </div>
         )}
 
         {/* Stage 1 Organ System Triage Banner */}
         {triage && (
-          <div className="bg-gradient-to-r from-teal-50 via-cyan-50 to-emerald-50 border border-teal-200/80 rounded-xl p-5 mb-6 shadow-sm">
+          <div className="border border-[rgb(var(--app-border))]/80 rounded-lg p-5 mb-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-teal-700 text-white uppercase tracking-wider">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-[rgb(var(--ink))] text-white">
                     Stage 1 Medical Triage
                   </span>
-                  <span className="text-xs text-teal-800 font-medium">
+                  <span className="text-[0.8125rem] text-[rgb(var(--ink))] font-medium">
                     Hierarchical Organ System Identification
                   </span>
                 </div>
                 <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2.5 mt-1">
-                  <Stethoscope className="h-5 w-5 text-teal-700" />
+                  <Stethoscope className="h-5 w-5 text-[rgb(var(--ink))]" />
                   {triage.primaryCategory}
-                  <span className="text-xs font-semibold text-teal-800 bg-teal-100 px-2.5 py-0.5 rounded-full border border-teal-200">
+                  <span className="text-[0.8125rem] font-semibold text-[rgb(var(--ink))] bg-[rgb(var(--app-raised))] px-2.5 py-0.5 rounded-full border border-[rgb(var(--app-border))]">
                     {triage.categoryConfidencePercent}% match
                   </span>
                 </h2>
                 <p className="text-sm text-slate-700 mt-1.5">
                   <span className="font-semibold text-slate-900">Recommended Specialist:</span>{' '}
-                  <span className="text-teal-800 font-medium">{triage.recommendedSpecialist}</span>
+                  <span className="text-[rgb(var(--ink))] font-medium">{triage.recommendedSpecialist}</span>
                 </p>
                 <div className="mt-3 flex items-center gap-2">
                   <Link
                     to={`/doctors?specialty=${encodeURIComponent(triage.recommendedSpecialist.split('/')[0].trim())}`}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold shadow-sm transition-all"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[rgb(var(--ink))] hover:bg-[rgb(var(--ink))] text-white text-[0.8125rem] font-bold transition-colors"
                   >
                     <Stethoscope className="w-3.5 h-3.5" />
                     <span>Consult a {triage.recommendedSpecialist.split('/')[0].trim()}</span>
@@ -283,14 +283,14 @@ const ResultsPage: React.FC = () => {
               </div>
 
               {differentialDiagnosis && (
-                <div className="bg-white/90 backdrop-blur rounded-lg p-3.5 border border-teal-200/70 text-right shrink-0 shadow-xs">
-                  <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                <div className="bg-white rounded-lg p-3.5 border border-[rgb(var(--app-border))]/70 text-right shrink-0">
+                  <div className="text-[11px] font-semibold text-[rgb(var(--ink-soft))]">
                     Top-3 Differential Coverage
                   </div>
-                  <div className="text-2xl font-extrabold text-teal-700 mt-0.5">
+                  <div className="text-2xl font-extrabold text-[rgb(var(--ink))] mt-0.5">
                     {differentialDiagnosis.top3CoveragePercent}%
                   </div>
-                  <div className="text-[11px] text-slate-500">
+                  <div className="text-[11px] text-[rgb(var(--ink-soft))]">
                     cumulative confidence
                   </div>
                 </div>
@@ -300,15 +300,15 @@ const ResultsPage: React.FC = () => {
         )}
         
         {/* Symptoms Overview */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border border-slate-200/80">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-2.5">
+        <div className="bg-white rounded-lg p-4 mb-6 border border-slate-200/80">
+          <h2 className="text-sm font-semibold text-[rgb(var(--ink-soft))] mb-2.5">
             Symptoms Evaluated ({selectedSymptoms.length})
           </h2>
           <div className="flex flex-wrap gap-2">
             {selectedSymptoms.map(symptom => (
               <div 
                 key={symptom.id} 
-                className="bg-teal-50 border border-teal-200/70 text-teal-800 px-3 py-1 rounded-full text-xs font-medium"
+                className="bg-[rgb(var(--app-raised))] border border-[rgb(var(--app-border))]/70 text-[rgb(var(--ink))] px-3 py-1 rounded-full text-[0.8125rem] font-medium"
               >
                 {symptom.name}
                 {symptom.severity && ` (${symptom.severity})`}
@@ -323,15 +323,15 @@ const ResultsPage: React.FC = () => {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-teal-700" />
+                <Sparkles className="h-5 w-5 text-[rgb(var(--ink))]" />
                 {t('possibleConditions')}
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-0.5">
                 Stage 2: Differential diagnosis ranked by category-conditioned probability
               </p>
             </div>
             {differentialDiagnosis && (
-              <span className="hidden sm:inline-flex text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded border border-slate-200">
+              <span className="hidden sm:inline-flex text-[0.8125rem] text-slate-600 bg-[rgb(var(--app-raised))] px-2.5 py-1 rounded border border-slate-200">
                 Top-1 to Top-3 Diagnostic Range
               </span>
             )}
@@ -349,15 +349,15 @@ const ResultsPage: React.FC = () => {
         </div>
         
         {/* Next Steps */}
-        <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
+        <div className="bg-[rgb(var(--app-ground))] rounded-lg p-6 border border-slate-200">
           <div className="flex items-center mb-4">
-            <FileText className="h-5 w-5 text-teal-700 mr-2" />
+            <FileText className="h-5 w-5 text-[rgb(var(--ink))] mr-2" />
             <h2 className="text-xl font-semibold text-slate-800">{t('nextSteps')}</h2>
           </div>
           
           <ul className="space-y-3">
             <li className="flex items-start">
-              <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center text-teal-700 font-medium mr-3 mt-0.5">
+              <div className="h-6 w-6 bg-[rgb(var(--app-raised))] rounded-full flex items-center justify-center text-[rgb(var(--ink))] font-medium mr-3 mt-0.5">
                 1
               </div>
               <p className="text-slate-700">
@@ -365,7 +365,7 @@ const ResultsPage: React.FC = () => {
               </p>
             </li>
             <li className="flex items-start">
-              <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center text-teal-700 font-medium mr-3 mt-0.5">
+              <div className="h-6 w-6 bg-[rgb(var(--app-raised))] rounded-full flex items-center justify-center text-[rgb(var(--ink))] font-medium mr-3 mt-0.5">
                 2
               </div>
               <p className="text-slate-700">
@@ -381,7 +381,7 @@ const ResultsPage: React.FC = () => {
               </p>
             </li>
             <li className="flex items-start">
-              <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center text-teal-700 font-medium mr-3 mt-0.5">
+              <div className="h-6 w-6 bg-[rgb(var(--app-raised))] rounded-full flex items-center justify-center text-[rgb(var(--ink))] font-medium mr-3 mt-0.5">
                 3
               </div>
               <p className="text-slate-700">
@@ -390,8 +390,8 @@ const ResultsPage: React.FC = () => {
             </li>
           </ul>
           
-          <div className="mt-6 text-sm text-gray-500">
-<p className="text-slate-500">{t('disclaimer')}</p>
+          <div className="mt-6 text-sm text-[rgb(var(--ink-soft))]">
+<p className="text-[rgb(var(--ink-soft))]">{t('disclaimer')}</p>
           </div>
         </div>
       </div>

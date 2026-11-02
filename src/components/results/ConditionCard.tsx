@@ -49,30 +49,30 @@ const ConditionCard: React.FC<ConditionCardProps> = ({ condition }) => {
   };
   
   return (
-    <div className={`border rounded-lg overflow-hidden shadow-sm transition-all hover:shadow-md ${
-      condition.rank === 1 ? 'ring-2 ring-emerald-500/30 border-emerald-300' :
-      condition.urgency === 'emergency' ? 'border-red-300' : 'border-gray-200'
-    }`}>
+    <div className={`border rounded-lg overflow-hidden transition-colors  ${
+ condition.rank === 1 ? 'ring-2 ring-[rgb(var(--app-border))]/30 border-[rgb(var(--app-border))]' :
+ condition.urgency === 'emergency' ? 'border-red-300' : 'border-gray-200'
+ }`}>
       <div className="p-4">
         {/* Differential Rank & Category Badges */}
         <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
           {condition.rank === 1 && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
-              ★ Top-1 Primary Match
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.8125rem] font-semibold bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border border-[rgb(var(--app-border))]">
+               Top-1 Primary Match
             </span>
           )}
           {condition.rank && condition.rank > 1 && condition.rank <= 3 && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.8125rem] font-semibold bg-[rgb(var(--app-raised))] text-[rgb(var(--ink-soft))] border border-[rgb(var(--app-border))]">
               #{condition.rank} Top-3 Differential
             </span>
           )}
           {condition.rank && condition.rank > 3 && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[0.8125rem] font-medium bg-[rgb(var(--app-raised))] text-slate-600">
               #{condition.rank} Alternative Consideration
             </span>
           )}
           {condition.category && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-teal-50 text-teal-700 border border-teal-200/50">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-[0.8125rem] font-medium bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border border-[rgb(var(--app-border))]/50">
               {condition.category}
             </span>
           )}
@@ -82,7 +82,7 @@ const ConditionCard: React.FC<ConditionCardProps> = ({ condition }) => {
           <h3 className="text-lg font-medium text-gray-900">{condition.name}</h3>
           <button
             onClick={readAloud}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-[rgb(var(--ink-soft))] hover:text-gray-700"
             aria-label="Read aloud"
           >
             <svg 
@@ -101,11 +101,11 @@ const ConditionCard: React.FC<ConditionCardProps> = ({ condition }) => {
         </div>
         
         <div className="flex items-center mt-2">
-          <div className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${urgencyDisplay.color}`}>
+          <div className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.8125rem] font-medium ${urgencyDisplay.color}`}>
             {urgencyDisplay.icon}
             <span className="ml-1">{urgencyDisplay.text}</span>
           </div>
-          <div className="ml-2 text-sm text-gray-500">
+          <div className="ml-2 text-sm text-[rgb(var(--ink-soft))]">
             {probabilityPercentage}% match
           </div>
         </div>
@@ -117,10 +117,10 @@ const ConditionCard: React.FC<ConditionCardProps> = ({ condition }) => {
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div 
               className={`h-2.5 rounded-full ${
-                condition.urgency === 'emergency' ? 'bg-red-600' : 
-                condition.urgency === 'high' ? 'bg-orange-600' :
-                condition.urgency === 'medium' ? 'bg-amber-500' : 'bg-blue-500'
-              }`} 
+ condition.urgency === 'emergency' ? 'bg-red-600' : 
+ condition.urgency === 'high' ? 'bg-orange-600' :
+ condition.urgency === 'medium' ? 'bg-amber-500' : 'bg-blue-500'
+ }`} 
               style={{ width: `${probabilityPercentage}%` }}
             ></div>
           </div>
@@ -128,9 +128,9 @@ const ConditionCard: React.FC<ConditionCardProps> = ({ condition }) => {
         
         {/* Recommended Specialist */}
         {condition.specialist && (
-          <div className="mt-3.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-500 font-medium">Recommended Specialist:</span>
-            <span className="text-teal-700 font-semibold bg-teal-50 px-2 py-0.5 rounded border border-teal-200/60">{condition.specialist}</span>
+          <div className="mt-3.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[0.8125rem]">
+            <span className="text-[rgb(var(--ink-soft))] font-medium">Recommended Specialist:</span>
+            <span className="text-[rgb(var(--ink))] font-semibold bg-[rgb(var(--app-raised))] px-2 py-0.5 rounded border border-[rgb(var(--app-border))]/60">{condition.specialist}</span>
           </div>
         )}
 
@@ -140,7 +140,7 @@ const ConditionCard: React.FC<ConditionCardProps> = ({ condition }) => {
           <ul className="mt-2 space-y-2">
             {condition.nextSteps.map((step, index) => (
               <li key={index} className="flex items-start">
-                <ArrowRight className="h-4 w-4 text-gray-500 mt-0.5 mr-2 flex-shrink-0" />
+                <ArrowRight className="h-4 w-4 text-[rgb(var(--ink-soft))] mt-0.5 mr-2 flex-shrink-0" />
                 <span className="text-sm text-gray-600">{step}</span>
               </li>
             ))}
