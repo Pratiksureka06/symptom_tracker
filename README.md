@@ -4,7 +4,6 @@ A two-stage clinical triage and differential diagnosis system.
 
 You describe what you are feeling. MediScan tells you **which kind of doctor to see**, and gives you **a ranked list of conditions that fit**, each with an urgency level and next steps.
 
-> **This is a student project for education and decision support. It is not a certified medical device, it has not been clinically validated, and it must not be used to make treatment decisions.**
 
 Built as Project-Based Learning coursework (CCE2170), Manipal University Jaipur.
 
