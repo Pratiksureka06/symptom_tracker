@@ -38,3 +38,9 @@ archive (1)/
 
 # Design-skill working files (screenshots, inspection reports)
 .taste-skill/
+
+# Coursework deliverables — kept locally, not published
+MediScan_PBL_Final_Report.docx
+MediScan_Presentation_Dark.pptx
+*.docx
+*.pptx
