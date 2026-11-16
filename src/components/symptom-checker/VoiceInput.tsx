@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Mic, MicOff, Check, Sparkles, Volume2 } from 'lucide-react';
 import voiceService from '../../services/VoiceService';
 import { useSymptoms, Symptom } from '../../contexts/SymptomContext';
-import { useLanguage } from '../../contexts/LanguageContext';
 
 interface VoiceInputProps {
   onSymptomsDetected?: (symptoms: Symptom[]) => void;
 }
 
 const VoiceInput: React.FC<VoiceInputProps> = ({ onSymptomsDetected }) => {
-  const { t } = useLanguage();
   const { addSymptom } = useSymptoms();
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');

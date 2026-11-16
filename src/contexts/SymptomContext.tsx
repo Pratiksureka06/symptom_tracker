@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useContext, useEffect, useRef, ReactNode } from 'react';
+import { useAuth } from './AuthContext';
 
 // API URL from environment variable
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -82,12 +83,25 @@ interface SymptomContextType {
   removeFromHistory: (id: string) => void;
 }
 
-// localStorage helpers
+/* localStorage helpers.
+
+   History is stored per user. It used to live under one global key with no
+   owner on the record, so every account on a device read the same checks:
+   signing in as a doctor showed that doctor the patient's symptom history,
+   health score and trends as if they were his own.
+
+   Anonymous use keeps the original key, because the app promises you can run
+   a check without an account. The first time a patient signs in, any
+   anonymous history on the device is adopted into their own scope so their
+   checks are not lost at the sign-in boundary. */
 const HISTORY_KEY = 'mediscan_history';
 
-const loadHistory = (): SymptomCheck[] => {
+export const historyKeyFor = (userId?: string | null): string =>
+  userId ? `${HISTORY_KEY}:${userId}` : HISTORY_KEY;
+
+const loadHistory = (key: string = HISTORY_KEY): SymptomCheck[] => {
   try {
-    const data = localStorage.getItem(HISTORY_KEY);
+    const data = localStorage.getItem(key);
     if (data) {
       const parsed = JSON.parse(data);
       // Restore Date objects from serialized strings
@@ -102,9 +116,9 @@ const loadHistory = (): SymptomCheck[] => {
   return [];
 };
 
-const saveHistory = (history: SymptomCheck[]) => {
+const saveHistory = (key: string, history: SymptomCheck[]) => {
   try {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    localStorage.setItem(key, JSON.stringify(history));
   } catch (e) {
     console.error('Failed to save history to localStorage:', e);
   }
@@ -137,12 +151,41 @@ export const SymptomProvider: React.FC<{children: ReactNode}> = ({ children }) =
   const [fallbackReason, setFallbackReason] = useState<string | null>(null);
   const [triage, setTriage] = useState<TriageResult | null>(null);
   const [differentialDiagnosis, setDifferentialDiagnosis] = useState<DifferentialDiagnosisResult | null>(null);
-  const [history, setHistory] = useState<SymptomCheck[]>(() => loadHistory());
+  /* Whose history this is. SymptomProvider sits inside AuthProvider, so the
+     signed-in user is available here. */
+  const { currentUser } = useAuth();
+  const storageKey = historyKeyFor(currentUser?.id);
 
-  // Persist history to localStorage whenever it changes
+  const [history, setHistory] = useState<SymptomCheck[]>(() => loadHistory(storageKey));
+
+  /* The key tracked by the state currently in memory. The save effect refuses
+     to run until the load for a key has finished, so that switching user
+     never writes the previous account's checks into the new account's slot. */
+  // Starts null so the load-and-adopt effect runs once on mount; seeding it
+  // with storageKey made the effect return early and adoption never ran.
+  const loadedKeyRef = useRef<string | null>(null);
+
   useEffect(() => {
-    saveHistory(history);
-  }, [history]);
+    if (loadedKeyRef.current === storageKey) return;
+
+    let next = loadHistory(storageKey);
+
+    // One-time adoption of anonymous history when a patient first signs in.
+    const isFirstScopedLoad = localStorage.getItem(storageKey) === null;
+    if (currentUser?.role === 'patient' && isFirstScopedLoad && next.length === 0) {
+      const anonymous = loadHistory(HISTORY_KEY);
+      if (anonymous.length > 0) next = anonymous;
+    }
+
+    setHistory(next);
+    loadedKeyRef.current = storageKey;
+  }, [storageKey, currentUser?.role]);
+
+  // Persist history to localStorage whenever it changes, into its own scope.
+  useEffect(() => {
+    if (loadedKeyRef.current !== storageKey) return;
+    saveHistory(storageKey, history);
+  }, [history, storageKey]);
 
   const addSymptom = (symptom: Symptom) => {
     setSelectedSymptoms(prev => [...prev, symptom]);
@@ -171,12 +214,22 @@ export const SymptomProvider: React.FC<{children: ReactNode}> = ({ children }) =
 
   const analyzeSymptoms = async (triggers?: string[]): Promise<Condition[]> => {
     const symptomNames = selectedSymptoms.map(s => s.name);
+
+    /* Severity, duration, per-symptom notes and the environmental factors the
+       person picked. The server forwards these to Gemini only; the local ML
+       model is unchanged and still scores on symptom names alone. */
+    const details = selectedSymptoms.map(s => ({
+      name: s.name,
+      severity: s.severity,
+      duration: s.duration,
+      notes: s.notes,
+    }));
     const response = await fetch(`${API_URL}/api/analyze`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ symptoms: symptomNames }),
+      body: JSON.stringify({ symptoms: symptomNames, details, triggers }),
     });
 
     if (!response.ok) {
@@ -218,7 +271,8 @@ export const SymptomProvider: React.FC<{children: ReactNode}> = ({ children }) =
 
   const clearHistory = () => {
     setHistory([]);
-    localStorage.removeItem(HISTORY_KEY);
+    // Clear this user's own slot, not the shared anonymous one.
+    localStorage.removeItem(storageKey);
   };
 
   const removeFromHistory = (id: string) => {

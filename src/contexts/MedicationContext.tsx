@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useContext, useEffect, useRef, ReactNode } from 'react';
+import { useAuth } from './AuthContext';
 
 export interface Medication {
   id: string;
@@ -63,17 +64,48 @@ const MedicationContext = createContext<MedicationContextType>({
 });
 
 export const MedicationProvider: React.FC<{children: ReactNode}> = ({ children }) => {
-  const [medications, setMedications] = useState<Medication[]>(() => loadFromStorage(MEDS_KEY, []));
-  const [medicationLog, setMedicationLog] = useState<MedicationLog[]>(() => loadFromStorage(MEDS_LOG_KEY, []));
+  /* Medicines are per user for the same reason history is: one global key
+     meant a doctor signing in on this device saw the patient's medicines. */
+  const { currentUser } = useAuth();
+  const medsKey = currentUser ? `${MEDS_KEY}:${currentUser.id}` : MEDS_KEY;
+  const logKey = currentUser ? `${MEDS_LOG_KEY}:${currentUser.id}` : MEDS_LOG_KEY;
 
-  // Persist to localStorage on changes
-  useEffect(() => {
-    saveToStorage(MEDS_KEY, medications);
-  }, [medications]);
+  const [medications, setMedications] = useState<Medication[]>(() => loadFromStorage(medsKey, []));
+  const [medicationLog, setMedicationLog] = useState<MedicationLog[]>(() => loadFromStorage(logKey, []));
+
+  // The scope the in-memory state belongs to; see SymptomContext for why.
+  // Null on first render so the effect below runs and can adopt legacy data.
+  const loadedKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
-    saveToStorage(MEDS_LOG_KEY, medicationLog);
-  }, [medicationLog]);
+    if (loadedKeyRef.current === medsKey) return;
+
+    let meds = loadFromStorage<Medication[]>(medsKey, []);
+    let log = loadFromStorage<MedicationLog[]>(logKey, []);
+
+    // Adopt anonymous entries the first time a patient signs in.
+    if (currentUser?.role === 'patient' && localStorage.getItem(medsKey) === null) {
+      const anonMeds = loadFromStorage<Medication[]>(MEDS_KEY, []);
+      const anonLog = loadFromStorage<MedicationLog[]>(MEDS_LOG_KEY, []);
+      if (anonMeds.length > 0) meds = anonMeds;
+      if (anonLog.length > 0) log = anonLog;
+    }
+
+    setMedications(meds);
+    setMedicationLog(log);
+    loadedKeyRef.current = medsKey;
+  }, [medsKey, logKey, currentUser?.role]);
+
+  // Persist to localStorage on changes, into this user's own scope.
+  useEffect(() => {
+    if (loadedKeyRef.current !== medsKey) return;
+    saveToStorage(medsKey, medications);
+  }, [medications, medsKey]);
+
+  useEffect(() => {
+    if (loadedKeyRef.current !== medsKey) return;
+    saveToStorage(logKey, medicationLog);
+  }, [medicationLog, logKey, medsKey]);
 
   const addMedication = (medication: Medication) => {
     setMedications(prev => [...prev, medication]);

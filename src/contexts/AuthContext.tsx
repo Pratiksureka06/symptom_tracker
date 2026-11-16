@@ -161,7 +161,7 @@ export const DEMO_PATIENT: PatientProfile = {
   email: 'john.doe@patient.mediscan.org',
   role: 'patient',
   age: 42,
-  gender: 'Male',
+  gender: 'Female',
   existingConditions: ['Hypertension (Mild)', 'Seasonal Allergic Rhinitis'],
   emergencyContact: '+91 98204 11732',
 };

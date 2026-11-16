@@ -35,6 +35,7 @@ const DoctorPortalPage: React.FC = () => {
 
   // Selected Dossier for Review Modal
   const [selectedConsultation, setSelectedConsultation] = useState<ConsultationRecord | null>(null);
+  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [doctorNotes, setDoctorNotes] = useState('');
   const [prescriptions, setPrescriptions] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,20 +76,66 @@ const DoctorPortalPage: React.FC = () => {
     );
   }
 
-  // Filter consultations for this doctor or all if general review
-  const doctorConsultations = consultations.filter((c) => {
-    // If assigned to this doctor or doctor can view queue
-    const matchesDoctor = c.doctorId === doctor?.id || true;
-    const matchesStatus =
-      filterStatus === 'all' ? true : c.status === filterStatus;
-    const matchesQuery =
-      c.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.chiefComplaint.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesDoctor && matchesStatus && matchesQuery;
-  });
+  /* Only the consultations addressed to the signed-in doctor.
+     This previously read `c.doctorId === doctor?.id || true`, and the
+     `|| true` short-circuited the whole test, so every doctor saw every
+     other doctor's patients. */
+  const doctorConsultations = consultations.filter((c) => c.doctorId === doctor?.id);
 
   const pendingCount = doctorConsultations.filter((c) => c.status === 'pending').length;
   const reviewedCount = doctorConsultations.filter((c) => c.status === 'reviewed').length;
+
+  /* The portal opens on people, not on a flat queue: one row per patient
+     who has consulted this doctor, most recent first. */
+  interface PatientRow {
+    id: string;
+    name: string;
+    age?: number;
+    gender?: string;
+    total: number;
+    pending: number;
+    last: string;
+  }
+
+  const patientMap = new Map<string, PatientRow>();
+  for (const c of doctorConsultations) {
+    const row = patientMap.get(c.patientId) ?? {
+      id: c.patientId,
+      name: c.patientName,
+      age: c.patientAge,
+      gender: c.patientGender,
+      total: 0,
+      pending: 0,
+      last: c.date,
+    };
+    row.total += 1;
+    if (c.status === 'pending') row.pending += 1;
+    if (new Date(c.date) > new Date(row.last)) row.last = c.date;
+    patientMap.set(c.patientId, row);
+  }
+
+  const patients = [...patientMap.values()]
+    .filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((a, b) => new Date(b.last).getTime() - new Date(a.last).getTime());
+
+  const openPatient = selectedPatientId
+    ? patientMap.get(selectedPatientId) ?? null
+    : null;
+
+  /* That patient's own history with this doctor, newest first. */
+  const patientConsultations = openPatient
+    ? doctorConsultations
+        .filter((c) => c.patientId === openPatient.id)
+        .filter((c) => (filterStatus === 'all' ? true : c.status === filterStatus))
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    : [];
+
+  const openPatientPending = openPatient
+    ? doctorConsultations.filter((c) => c.patientId === openPatient.id && c.status === 'pending').length
+    : 0;
+  const openPatientReviewed = openPatient
+    ? doctorConsultations.filter((c) => c.patientId === openPatient.id && c.status === 'reviewed').length
+    : 0;
 
   const handleOpenDossier = (consultation: ConsultationRecord) => {
     setSelectedConsultation(consultation);
@@ -226,7 +273,97 @@ const DoctorPortalPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Filter & Search Bar */}
+        {/* Your patients. The portal opens on people, not on a queue. */}
+        {!openPatient && (
+          <>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 className="app-section-title">Your patients ({patients.length})</h2>
+              <div className="relative w-full sm:w-64">
+                <Search className="w-4 h-4 text-[rgb(var(--ink-soft))] absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search your patients..."
+                  className="w-full pl-9 pr-3 py-1.5 text-[0.8125rem] bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] text-slate-800"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              {patients.map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedPatientId(p.id);
+                    setFilterStatus('all');
+                    setSearchQuery('');
+                  }}
+                  className="w-full text-left app-panel rounded-lg p-5 hover:bg-[rgb(var(--app-raised))] transition-colors flex flex-wrap items-center justify-between gap-4"
+                >
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-semibold text-slate-800 text-base">{p.name}</span>
+                      {p.age !== undefined && (
+                        <span className="text-[0.8125rem] text-[rgb(var(--ink-soft))]">
+                          {p.age}y{p.gender ? ` • ${p.gender}` : ''}
+                        </span>
+                      )}
+                      {p.pending > 0 && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.8125rem] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                          <Clock className="w-3 h-3" />
+                          {p.pending} waiting
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-1">
+                      {p.total} consultation{p.total === 1 ? '' : 's'} with you • last on{' '}
+                      {new Date(p.last).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <span className="text-[0.8125rem] font-semibold text-[rgb(var(--ink))] shrink-0">
+                    Open history →
+                  </span>
+                </button>
+              ))}
+
+              {patients.length === 0 && (
+                <div className="text-center py-16 px-4 app-panel rounded-lg">
+                  <h3 className="text-base font-semibold text-slate-700">No patients yet</h3>
+                  <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-1">
+                    {searchQuery
+                      ? 'No patient of yours matches that name.'
+                      : 'When a patient sends you a symptom check, they will appear here.'}
+                  </p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
+        {/* One patient's history with this doctor. */}
+        {openPatient && (
+          <>
+            <div className="flex flex-col gap-4">
+              <button
+                type="button"
+                onClick={() => setSelectedPatientId(null)}
+                className="self-start text-[0.8125rem] font-semibold text-[rgb(var(--ink))] hover:underline"
+              >
+                ← All your patients
+              </button>
+
+              <div className="app-panel rounded-lg p-5">
+                <h2 className="app-title">{openPatient.name}</h2>
+                <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-1">
+                  {openPatient.age !== undefined ? `${openPatient.age}y • ` : ''}
+                  {openPatient.gender ? `${openPatient.gender} • ` : ''}
+                  {openPatient.total} consultation{openPatient.total === 1 ? '' : 's'} with you
+                </p>
+              </div>
+            </div>
+
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <button
@@ -237,7 +374,7 @@ const DoctorPortalPage: React.FC = () => {
  : 'bg-white text-slate-600 border border-slate-200 hover:bg-[rgb(var(--app-ground))]'
  }`}
             >
-              All Cases ({doctorConsultations.length})
+              All ({openPatient.total})
             </button>
             <button
               onClick={() => setFilterStatus('pending')}
@@ -247,7 +384,7 @@ const DoctorPortalPage: React.FC = () => {
  : 'bg-white text-slate-600 border border-slate-200 hover:bg-[rgb(var(--app-ground))]'
  }`}
             >
-              Pending ({pendingCount})
+              Waiting ({openPatientPending})
             </button>
             <button
               onClick={() => setFilterStatus('reviewed')}
@@ -257,25 +394,15 @@ const DoctorPortalPage: React.FC = () => {
  : 'bg-white text-slate-600 border border-slate-200 hover:bg-[rgb(var(--app-ground))]'
  }`}
             >
-              Completed ({reviewedCount})
+              Reviewed ({openPatientReviewed})
             </button>
           </div>
 
-          <div className="relative w-full sm:w-64">
-            <Search className="w-4 h-4 text-[rgb(var(--ink-soft))] absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search patient or complaint..."
-              className="w-full pl-9 pr-3 py-1.5 text-[0.8125rem] bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-[rgb(var(--app-border))] focus:ring-2 focus:ring-[rgb(var(--app-border))]/10 text-slate-800"
-            />
-          </div>
         </div>
 
         {/* Patient Consultations Queue */}
         <div className="space-y-3">
-          {doctorConsultations.map((consultation) => {
+          {patientConsultations.map((consultation) => {
             const hasSnapshot = !!consultation.symptomCheckSnapshot;
             const topCondition = hasSnapshot ? consultation.symptomCheckSnapshot?.conditions[0] : null;
 
@@ -371,16 +498,18 @@ const DoctorPortalPage: React.FC = () => {
             );
           })}
 
-          {doctorConsultations.length === 0 && (
-            <div className="text-center py-16 px-4 bg-white/70 rounded-lg border border-dashed border-slate-200">
+          {patientConsultations.length === 0 && (
+            <div className="text-center py-16 px-4 app-panel rounded-lg">
               <CheckCircle2 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-              <h3 className="text-base font-bold text-slate-700">Triage Queue Empty</h3>
+              <h3 className="text-base font-semibold text-slate-700">Nothing under this filter</h3>
               <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-1">
-                No patient consultations currently matching this criteria.
+                {openPatient.name} has no consultations with you in this state.
               </p>
             </div>
           )}
-        </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Comprehensive Patient Dossier & Review Modal */}

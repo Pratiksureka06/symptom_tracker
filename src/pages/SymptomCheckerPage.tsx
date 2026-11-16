@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSymptoms } from '../contexts/SymptomContext';
-import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import SymptomSelector from '../components/symptom-checker/SymptomSelector';
 import TriggerSelector from '../components/symptom-checker/TriggerSelector';
@@ -18,7 +17,6 @@ import {
 } from 'lucide-react';
 
 const SymptomCheckerPage: React.FC = () => {
-  const { t } = useLanguage();
   const { selectedSymptoms, analyzeSymptoms } = useSymptoms();
   const { addToast } = useToast();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -114,8 +112,8 @@ const SymptomCheckerPage: React.FC = () => {
                 disabled={selectedSymptoms.length === 0 || isAnalyzing}
                 className={`w-full py-3 px-4 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-colors ${
  selectedSymptoms.length === 0 || isAnalyzing
- ? 'bg-slate-200 text-[rgb(var(--ink-soft))] cursor-not-allowed shadow-none'
- : 'text-white active:scale-98'
+ ? 'bg-[rgb(var(--app-control))] text-[rgb(var(--ink-soft))] cursor-not-allowed'
+ : 'bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] text-white active:scale-98'
  }`}
               >
                 {isAnalyzing ? (

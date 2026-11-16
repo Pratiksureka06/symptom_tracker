@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSymptoms } from '../contexts/SymptomContext';
-import { useLanguage } from '../contexts/LanguageContext';
 import ConditionCard from '../components/results/ConditionCard';
 import { Activity, ArrowLeft, ArrowRight, AlertCircle, Printer, FileText, Download, Stethoscope, Sparkles } from 'lucide-react';
 import jsPDF from 'jspdf';
 
 const ResultsPage: React.FC = () => {
-  const { t } = useLanguage();
   const { selectedSymptoms, conditions, triage, differentialDiagnosis, engine, fallbackReason } = useSymptoms();
   const navigate = useNavigate();
   
@@ -193,7 +191,7 @@ const ResultsPage: React.FC = () => {
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
             </button>
-            <h1 className="text-2xl font-bold text-slate-800">{t('results')}</h1>
+            <h1 className="text-2xl font-bold text-slate-800">{'Results'}</h1>
             {engine && (
               <span
                 title={fallbackReason ? `Gemini failed, local model used: ${fallbackReason}` : undefined}
@@ -324,7 +322,7 @@ const ResultsPage: React.FC = () => {
             <div>
               <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-[rgb(var(--ink))]" />
-                {t('possibleConditions')}
+                {'Possible conditions'}
               </h2>
               <p className="text-[0.8125rem] text-[rgb(var(--ink-soft))] mt-0.5">
                 Step two: what fits best, ranked within that part of the body
@@ -352,7 +350,7 @@ const ResultsPage: React.FC = () => {
         <div className="bg-[rgb(var(--app-ground))] rounded-lg p-6 border border-slate-200">
           <div className="flex items-center mb-4">
             <FileText className="h-5 w-5 text-[rgb(var(--ink))] mr-2" />
-            <h2 className="text-xl font-semibold text-slate-800">{t('nextSteps')}</h2>
+            <h2 className="text-xl font-semibold text-slate-800">{'Recommended next steps'}</h2>
           </div>
           
           <ul className="space-y-3">
@@ -391,7 +389,7 @@ const ResultsPage: React.FC = () => {
           </ul>
           
           <div className="mt-6 text-sm text-[rgb(var(--ink-soft))]">
-<p className="text-[rgb(var(--ink-soft))]">{t('disclaimer')}</p>
+<p className="text-[rgb(var(--ink-soft))]">{'This is not a medical diagnosis. Always check with a healthcare professional.'}</p>
           </div>
         </div>
       </div>

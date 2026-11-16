@@ -1,5 +1,8 @@
 import { Symptom } from '../contexts/SymptomContext';
 
+// Same backend the rest of the app talks to.
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
 // Define the interface for the voice service
 interface VoiceServiceInterface {
   startListening: () => Promise<void>;
@@ -106,80 +109,45 @@ class VoiceService implements VoiceServiceInterface {
   }
   
   // Analyze speech to extract symptoms - in a real app, this would call an AI service
+  /**
+   * Turn a transcript into symptoms from the real catalogue.
+   *
+   * This used to match nine hardcoded phrases, so "my chest hurts" found
+   * nothing because the literal string was "chest pain". It now asks the
+   * server, which maps everyday wording onto the full 377-symptom catalogue
+   * with Gemini and falls back to word matching against the same catalogue
+   * when Gemini is unavailable.
+   *
+   * Names come back in catalogue spelling, and the id convention matches the
+   * one SymptomSelector uses, so a spoken symptom and a tapped one are the
+   * same entry rather than two.
+   */
   async analyzeSpeech(text: string): Promise<Symptom[]> {
-    // This is a mock implementation. In a real application, you would send this text
-    // to a natural language processing service to extract symptoms
-    
-    // Simple keyword matching for demo purposes
-    const keywordMap: Record<string, Symptom> = {
-      'headache': {
-        id: 'headache-1',
-        name: 'Headache',
-        bodyArea: 'Head',
-      },
-      'head pain': {
-        id: 'headache-2',
-        name: 'Headache',
-        bodyArea: 'Head',
-      },
-      'migraine': {
-        id: 'headache-3',
-        name: 'Migraine',
-        bodyArea: 'Head',
-      },
-      'fever': {
-        id: 'fever-1',
-        name: 'Fever',
-        bodyArea: 'Whole body',
-      },
-      'high temperature': {
-        id: 'fever-2',
-        name: 'Fever',
-        bodyArea: 'Whole body',
-      },
-      'cough': {
-        id: 'cough-1',
-        name: 'Cough',
-        bodyArea: 'Chest',
-      },
-      'sore throat': {
-        id: 'throat-1',
-        name: 'Sore Throat',
-        bodyArea: 'Throat',
-      },
-      'runny nose': {
-        id: 'nose-1',
-        name: 'Runny Nose',
-        bodyArea: 'Nose',
-      },
-      'chest pain': {
-        id: 'chest-pain-1',
-        name: 'Chest Pain',
-        bodyArea: 'Chest',
-      }
-    };
-    
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const foundSymptoms: Symptom[] = [];
-    const lowerText = text.toLowerCase();
-    
-    // Simple keyword matching
-    Object.keys(keywordMap).forEach(keyword => {
-      if (lowerText.includes(keyword)) {
-        // Prevent duplicates (simplified approach)
-        const symptomExists = foundSymptoms.some(s => 
-          s.name.toLowerCase() === keywordMap[keyword].name.toLowerCase()
-        );
-        
-        if (!symptomExists) {
-          foundSymptoms.push({...keywordMap[keyword]});
-        }
-      }
-    });
-    
-    return foundSymptoms;
+    const transcript = (text || '').trim();
+    if (!transcript) return [];
+
+    try {
+      const response = await fetch(`${API_URL}/api/extract-symptoms`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transcript }),
+      });
+
+      if (!response.ok) throw new Error(`Extraction failed: ${response.status}`);
+
+      const data = await response.json();
+      const names: string[] = Array.isArray(data?.symptoms) ? data.symptoms : [];
+
+      return names.map((name) => ({
+        id: name.toLowerCase().replace(/\s/g, '-'),
+        name,
+        bodyArea: 'General',
+      }));
+    } catch (err) {
+      console.error('Could not turn speech into symptoms:', err);
+      this._error = 'Could not read those symptoms. Try adding them by hand.';
+      return [];
+    }
   }
   
   // Text to speech function

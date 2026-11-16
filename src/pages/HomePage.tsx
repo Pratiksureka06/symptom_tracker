@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useReveal } from '../hooks/useReveal';
+import { useSymptoms } from '../contexts/SymptomContext';
 
 /* ---------------------------------------------------------------------------
    MediScan home page — direction "Colour chapters" (seed 1330060451).
@@ -26,6 +27,21 @@ const SymptomFinder: React.FC = () => {
   const [all, setAll] = useState<string[]>([]);
   const [query, setQuery] = useState('');
   const [failed, setFailed] = useState(false);
+  const { addSymptom } = useSymptoms();
+  const navigate = useNavigate();
+
+  /* Picking a match adds it to the check and opens the checker with it
+     already selected, which is what a person expects a result list to do.
+     The id convention matches the one SymptomSelector uses for quick-add,
+     so the same symptom never lands twice under two different ids. */
+  const choose = (name: string) => {
+    addSymptom({
+      id: name.toLowerCase().replace(/\s/g, '-'),
+      name,
+      bodyArea: 'General',
+    });
+    navigate('/symptom-checker');
+  };
 
   useEffect(() => {
     let live = true;
@@ -77,10 +93,16 @@ const SymptomFinder: React.FC = () => {
         )}
 
         {hasQuery && matches.length > 0 && (
-          <ul className="space-y-2">
+          <ul className="space-y-1">
             {matches.map((m) => (
-              <li key={m} className="text-body text-field-low-ink">
-                {m}
+              <li key={m}>
+                <button
+                  type="button"
+                  onClick={() => choose(m)}
+                  className="-mx-3 w-[calc(100%+1.5rem)] px-3 py-2 text-left text-body text-field-low-ink transition-colors hover:bg-paper hover:text-onink focus-visible:bg-paper focus-visible:text-onink"
+                >
+                  {m}
+                </button>
               </li>
             ))}
           </ul>
@@ -163,8 +185,7 @@ const HomePage: React.FC = () => {
             <h1 data-reveal className="font-display text-display text-onink">Tell us what hurts.</h1>
             <p data-reveal data-reveal-delay="90" className="mt-10 max-w-xl text-lead text-onink">
               MediScan checks what you are feeling against 773 conditions and tells you how soon
-              to see someone. It is free, it keeps your answers on your own device, and it speaks
-              12 Indian languages.
+              to see someone. It is free, and it keeps your answers on your own device.
             </p>
             <p data-reveal data-reveal-delay="170" className="mt-6 max-w-xl text-body text-ink-soft">
               It is not a diagnosis. It is a way to find out whether you need a doctor this week,
@@ -374,13 +395,6 @@ const HomePage: React.FC = () => {
           <h2 data-reveal className="font-display text-head max-w-2xl text-onink">What else it does for you.</h2>
 
           <div className="mt-16 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <div data-reveal className="bg-paper-step p-8">
-              <h3 data-reveal className="text-lead text-onink">Twelve languages</h3>
-              <p data-reveal data-reveal-delay="90" className="mt-4 text-body text-ink-soft">
-                Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Malayalam, Punjabi,
-                Assamese, Odia and English. The whole interface moves, not only the labels.
-              </p>
-            </div>
             <div data-reveal className="bg-paper-step p-8">
               <h3 data-reveal className="text-lead text-onink">Say it out loud</h3>
               <p data-reveal data-reveal-delay="90" className="mt-4 text-body text-ink-soft">

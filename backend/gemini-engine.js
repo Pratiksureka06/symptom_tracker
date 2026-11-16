@@ -62,15 +62,68 @@ const responseSchema = {
   required: ['primaryCategoryId', 'conditions'],
 };
 
-function buildPrompt(symptoms) {
+/**
+ * Render the per-symptom detail a person gave: how bad it is, how long it has
+ * run, and anything they typed about its quality. Only symptoms that carry at
+ * least one of these produce a line.
+ */
+function buildDetailLines(details) {
+  if (!Array.isArray(details)) return [];
+  return details
+    .map((d) => {
+      if (!d || !d.name) return null;
+      const parts = [];
+      if (d.severity) parts.push(String(d.severity));
+      if (d.duration) parts.push(`for ${d.duration}`);
+      if (d.notes) parts.push(`described as "${String(d.notes).slice(0, 160)}"`);
+      return parts.length ? `- ${d.name}: ${parts.join(', ')}` : null;
+    })
+    .filter(Boolean);
+}
+
+/**
+ * The context block is omitted entirely when nothing was reported, so a check
+ * with no detail produces exactly the prompt this engine has always sent.
+ */
+function buildContextBlock(context = {}) {
+  const detailLines = buildDetailLines(context.details);
+  const triggers = Array.isArray(context.triggers) ? context.triggers.filter(Boolean) : [];
+  if (detailLines.length === 0 && triggers.length === 0) return [];
+
+  const block = [];
+  if (detailLines.length > 0) {
+    block.push('', 'Detail the person gave, where they gave it:', ...detailLines);
+  }
+  if (triggers.length > 0) {
+    block.push('', `Environmental factors the person associates with this: ${triggers.join(', ')}.`);
+  }
+  return block;
+}
+
+function buildPrompt(symptoms, context = {}) {
+  const contextBlock = buildContextBlock(context);
+  const contextRules = contextBlock.length
+    ? [
+        '- Weigh the reported severity and duration: a severe or long-running symptom',
+        '  should favour conditions whose usual course fits it, and should raise urgency',
+        '  where that is clinically reasonable.',
+        '- Environmental factors are what the person believes is involved, not established',
+        '  cause. Treat them as context that can tip between otherwise similar conditions,',
+        '  never as confirmation.',
+        '- Where a symptom carries no detail, do not assume it is mild or recent.',
+      ]
+    : [];
+
   return [
     'You are a clinical decision-support tool producing an educational differential',
     'diagnosis. You are not giving medical advice and not making a definitive diagnosis.',
     '',
     `Reported symptoms: ${symptoms.join(', ')}.`,
+    ...contextBlock,
     '',
     'Return exactly 5 candidate conditions, most likely first.',
     'Rules:',
+    ...contextRules,
     '- probability is your confidence for that condition, between 0.01 and 0.99.',
     '- The 5 probabilities should sum to roughly 1.0; do not give several conditions 0.99.',
     '- Weigh how specific each symptom combination is. Common presentations should',
@@ -149,8 +202,11 @@ function buildTriage(symptoms, conditions, primaryCategoryId) {
   };
 }
 
-/** One attempt against one model. Throws with `.retryable` set on transient faults. */
-async function callModel(model, symptoms, apiKey) {
+/**
+ * One attempt against one model, for any prompt and schema.
+ * Throws with `.retryable` set on transient faults.
+ */
+async function callGemini(model, promptText, schema, apiKey, temperature = 0.3, timeoutMs = 25000) {
   let res;
   try {
     res = await fetch(`${API_BASE}/${model}:generateContent`, {
@@ -160,14 +216,14 @@ async function callModel(model, symptoms, apiKey) {
         'x-goog-api-key': apiKey,
       },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: buildPrompt(symptoms) }] }],
+        contents: [{ parts: [{ text: promptText }] }],
         generationConfig: {
           responseMimeType: 'application/json',
-          responseSchema,
-          temperature: 0.3,
+          responseSchema: schema,
+          temperature,
         },
       }),
-      signal: AbortSignal.timeout(25000),
+      signal: AbortSignal.timeout(timeoutMs),
     });
   } catch (cause) {
     // Timeout / network fault — worth trying the next model.
@@ -194,7 +250,12 @@ async function callModel(model, symptoms, apiKey) {
   return text;
 }
 
-async function analyzeWithGemini(symptoms) {
+/** The differential call, unchanged in behaviour: same schema, same temperature. */
+function callModel(model, symptoms, apiKey, context) {
+  return callGemini(model, buildPrompt(symptoms, context), responseSchema, apiKey, 0.3);
+}
+
+async function analyzeWithGemini(symptoms, context) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('GEMINI_API_KEY is not set.');
 
@@ -205,7 +266,7 @@ async function analyzeWithGemini(symptoms) {
   let lastError;
   for (const model of chain) {
     try {
-      text = await callModel(model, symptoms, apiKey);
+      text = await callModel(model, symptoms, apiKey, context);
       if (model !== primary) {
         console.warn(`Gemini: ${primary} unavailable, answered with ${model}`);
       }
@@ -268,4 +329,108 @@ async function analyzeWithGemini(symptoms) {
   };
 }
 
-module.exports = { analyzeWithGemini, isConfigured, DEFAULT_MODEL };
+/* ---------------------------------------------------------------------------
+   Turning spoken words into symptoms.
+
+   The old implementation matched a transcript against nine hardcoded phrases,
+   so "my chest hurts" found nothing because the literal string was
+   "chest pain". This asks Gemini to map what the person actually said onto
+   the real catalogue, and then keeps only names that genuinely exist in it:
+   the model never invents a symptom the rest of the app cannot handle.
+--------------------------------------------------------------------------- */
+
+const extractSchema = {
+  type: 'object',
+  properties: {
+    symptoms: {
+      type: 'array',
+      items: { type: 'string' },
+    },
+  },
+  required: ['symptoms'],
+};
+
+function buildExtractPrompt(transcript, canonical) {
+  return [
+    'A person described how they feel, in their own words. Map what they said',
+    'onto a fixed catalogue of symptom names.',
+    '',
+    `What they said: "${String(transcript).slice(0, 2000)}"`,
+    '',
+    'Rules:',
+    '- Return only names copied exactly from the catalogue below. Never invent one.',
+    '- Map everyday wording onto the catalogue: "my chest hurts" is chest pain,',
+    '  "throwing up" is vomiting, "can\'t sleep" is insomnia.',
+    '- Include a symptom only if the person says they have it. Ignore anything they',
+    '  deny ("no fever"), ask about, or mention as past history.',
+    '- Return an empty list if nothing in the catalogue matches.',
+    '- At most 12 symptoms.',
+    '',
+    'Catalogue:',
+    canonical.join('; '),
+  ].join('\n');
+}
+
+/**
+ * @param {string} transcript what the person said
+ * @param {string[]} canonical the full symptom catalogue
+ * @returns {Promise<string[]>} names guaranteed to exist in `canonical`
+ */
+async function extractSymptomsWithGemini(transcript, canonical) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('GEMINI_API_KEY is not set.');
+  if (!transcript || !String(transcript).trim()) return [];
+
+  const primary = process.env.GEMINI_MODEL || DEFAULT_MODEL;
+  const chain = [primary, ...FALLBACK_MODELS.filter((m) => m !== primary)];
+  const prompt = buildExtractPrompt(transcript, canonical);
+
+  /* Two sweeps of the chain. In testing all three models returned 503
+     ("high demand") within the same second, and the identical request
+     succeeded moments later, so one sweep gives up too easily on what is a
+     momentary spike. The analysis path keeps its single sweep: this one is
+     short (20s per call) and a person is waiting on it. */
+  let text;
+  let lastError;
+  outer: for (let sweep = 0; sweep < 2; sweep++) {
+    if (sweep > 0) await new Promise((r) => setTimeout(r, 700));
+    for (const model of chain) {
+      try {
+        // Temperature 0: this is a lookup, not a judgement call.
+        text = await callGemini(model, prompt, extractSchema, apiKey, 0, 20000);
+        break outer;
+      } catch (error) {
+        lastError = error;
+        if (!error.retryable) throw error;
+      }
+    }
+  }
+  if (!text) throw lastError || new Error('No Gemini model answered.');
+
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error('Gemini returned unparseable JSON for symptom extraction.');
+  }
+
+  // Keep only names that really exist in the catalogue, in catalogue spelling.
+  const byLower = new Map(canonical.map((n) => [n.toLowerCase(), n]));
+  const seen = new Set();
+  const out = [];
+  for (const raw of Array.isArray(parsed.symptoms) ? parsed.symptoms : []) {
+    const hit = byLower.get(String(raw).trim().toLowerCase());
+    if (hit && !seen.has(hit)) {
+      seen.add(hit);
+      out.push(hit);
+    }
+  }
+  return out.slice(0, 12);
+}
+
+module.exports = {
+  analyzeWithGemini,
+  extractSymptomsWithGemini,
+  isConfigured,
+  DEFAULT_MODEL,
+};

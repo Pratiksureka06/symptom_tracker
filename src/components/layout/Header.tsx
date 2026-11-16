@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useLanguage } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
   Menu, 
   X, 
-  Globe, 
   History, 
   Home, 
   Activity, 
@@ -20,55 +18,25 @@ import {
 } from 'lucide-react';
 
 const Header: React.FC = () => {
-  const { language, setLanguage, t, availableLanguages } = useLanguage();
   const { currentUser, isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    if (isLanguageMenuOpen) setIsLanguageMenuOpen(false);
-    if (isUserMenuOpen) setIsUserMenuOpen(false);
-  };
-
-  const toggleLanguageMenu = () => {
-    setIsLanguageMenuOpen(!isLanguageMenuOpen);
     if (isUserMenuOpen) setIsUserMenuOpen(false);
   };
 
   const toggleUserMenu = () => {
     setIsUserMenuOpen(!isUserMenuOpen);
-    if (isLanguageMenuOpen) setIsLanguageMenuOpen(false);
-  };
-
-  const changeLanguage = (lang: typeof language) => {
-    setLanguage(lang);
-    setIsLanguageMenuOpen(false);
   };
 
   const handleLogout = () => {
     logout();
     setIsUserMenuOpen(false);
     navigate('/');
-  };
-
-  // Language names for display
-  const languageNames: Record<string, string> = {
-    en: 'English',
-    hi: 'हिन्दी',
-    bn: 'বাংলা',
-    te: 'తెలుగు',
-    mr: 'मराठी',
-    ta: 'தமிழ்',
-    gu: 'ગુજરાતી',
-    kn: 'ಕನ್ನಡ',
-    ml: 'മലയാളം',
-    pa: 'ਪੰਜਾਬੀ',
-    as: 'অসমীয়া',
-    or: 'ଓଡ଼ିଆ'
   };
 
   const isDoctor = currentUser?.role === 'doctor';
@@ -119,44 +87,6 @@ const Header: React.FC = () => {
 
           {/* Trailing Controls & Status */}
           <div className="hidden sm:flex items-center gap-2.5">
-            {/* PWA Sync Status Pill */}
-            <div className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[rgb(var(--app-raised))] border border-[rgb(var(--app-border))] text-[rgb(var(--ink))] text-[11px] font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              <span>Online • Synced</span>
-            </div>
-
-            {/* Language Selector Dropdown */}
-            <div className="relative">
-              <button
-                onClick={toggleLanguageMenu}
-                className="flex items-center gap-1 px-2 py-1.5 rounded-lg border border-slate-200 hover:bg-[rgb(var(--app-ground))] text-slate-700 text-[0.8125rem] font-medium transition-colors"
-                aria-expanded={isLanguageMenuOpen}
-              >
-                <Globe className="h-3.5 w-3.5 text-[rgb(var(--ink-soft))]" />
-                <span className="hidden md:inline">{languageNames[language]}</span>
-                <ChevronDown className="h-3 w-3 text-[rgb(var(--ink-soft))]" />
-              </button>
-
-              {isLanguageMenuOpen && (
-                <div className="absolute right-0 mt-1.5 w-40 bg-white rounded-lg border border-slate-200 py-1 z-50 max-h-64 overflow-y-auto shadow-lg">
-                  {availableLanguages.map((lang) => (
-                    <button
-                      key={lang}
-                      onClick={() => changeLanguage(lang)}
-                      className={`w-full text-left px-3 py-1.5 text-[0.8125rem] flex items-center justify-between transition-colors ${
- language === lang 
- ? 'bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] font-bold' 
- : 'text-slate-700 hover:bg-[rgb(var(--app-ground))]'
- }`}
-                    >
-                      <span>{languageNames[lang]}</span>
-                      {language === lang && <span className="text-[rgb(var(--ink))] text-[11px]"></span>}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
             {/* User Account / Role Badge */}
             {isAuthenticated && currentUser ? (
               <div className="relative">

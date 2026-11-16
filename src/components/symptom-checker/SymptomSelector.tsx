@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Search, Plus, X, Loader2, Sparkles, Filter, Check } from 'lucide-react';
 import { useSymptoms, Symptom } from '../../contexts/SymptomContext';
-import { useLanguage } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -29,7 +28,6 @@ const POPULAR_TAGS = [
 ];
 
 const SymptomSelector: React.FC = () => {
-  const { t } = useLanguage();
   const { selectedSymptoms, addSymptom, removeSymptom } = useSymptoms();
   const { addToast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');

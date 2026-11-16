@@ -12,6 +12,7 @@ const {
 } = require('./dataset-engine.js');
 const {
   analyzeWithGemini,
+  extractSymptomsWithGemini,
   isConfigured: isGeminiConfigured,
   DEFAULT_MODEL: GEMINI_DEFAULT_MODEL,
 } = require('./gemini-engine.js');
@@ -79,11 +80,80 @@ app.get('/api/engines', (req, res) => {
   });
 });
 
+/* Spoken words -> symptoms from the real catalogue.
+
+   Gemini does the mapping so everyday wording works ("my chest hurts",
+   "throwing up"). When no key is set, or the call fails, a plain word-overlap
+   match against the same catalogue answers instead, so dictation degrades
+   rather than stopping. Either way the result only ever contains names that
+   exist in Symptoms. */
+const extractLocally = (transcript, canonical) => {
+  const text = ` ${String(transcript).toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ')} `;
+  const STOP = new Set(['or', 'and', 'of', 'the', 'in', 'on', 'a', 'to', 'with']);
+
+  const hits = [];
+  for (const name of canonical) {
+    const lower = name.toLowerCase();
+    if (text.includes(` ${lower} `)) {
+      hits.push({ name, score: lower.length + 100 });
+      continue;
+    }
+    const words = lower.split(/\s+/).filter((w) => w.length > 3 && !STOP.has(w));
+    if (words.length === 0) continue;
+    const matched = words.filter((w) => text.includes(` ${w} `) || text.includes(` ${w}s `));
+    // Every significant word must be present, so "pain" alone cannot match
+    // "Sharp Chest Pain".
+    if (matched.length === words.length) {
+      hits.push({ name, score: lower.length });
+    }
+  }
+
+  // Prefer the most specific match and drop names contained in a better one.
+  hits.sort((a, b) => b.score - a.score);
+  const kept = [];
+  for (const h of hits) {
+    if (!kept.some((k) => k.toLowerCase().includes(h.name.toLowerCase()))) kept.push(h.name);
+  }
+  return kept.slice(0, 12);
+};
+
+app.post('/api/extract-symptoms', async (req, res) => {
+  const { transcript } = req.body;
+  if (typeof transcript !== 'string') {
+    return res.status(400).json({ error: '"transcript" must be a string.' });
+  }
+  if (!transcript.trim()) return res.json({ symptoms: [], engine: 'none' });
+
+  if (isGeminiConfigured()) {
+    try {
+      const symptoms = await extractSymptomsWithGemini(transcript, Symptoms);
+      return res.json({ symptoms, engine: 'gemini' });
+    } catch (error) {
+      console.error('Gemini symptom extraction failed, matching locally:', error.message);
+    }
+  }
+
+  return res.json({
+    symptoms: extractLocally(transcript, Symptoms),
+    engine: 'local',
+  });
+});
+
 app.post('/api/analyze', async (req, res) => {
-  const { symptoms, engine } = req.body;
+  const { symptoms, engine, details, triggers } = req.body;
   if (!symptoms || !Array.isArray(symptoms)) {
     return res.status(400).json({ error: 'Invalid request body. "symptoms" must be an array of strings.' });
   }
+
+  /* Severity, duration, per-symptom notes and environmental factors go to
+     Gemini only. The local model is a Naive Bayes over symptom presence that
+     was trained without them, so it still receives names alone and its
+     results are unchanged. Both fields are optional: a request without them
+     produces exactly the prompt this endpoint has always sent. */
+  const context = {
+    details: Array.isArray(details) ? details : undefined,
+    triggers: Array.isArray(triggers) ? triggers : undefined,
+  };
 
   // Gemini is preferred when a key is present; 'ml' forces the local model.
   const wantGemini = engine ? engine === 'gemini' : isGeminiConfigured();
@@ -93,7 +163,7 @@ app.post('/api/analyze', async (req, res) => {
       return res.status(503).json({ error: 'Gemini requested but GEMINI_API_KEY is not set on the server.' });
     }
     try {
-      const results = await analyzeWithGemini(symptoms);
+      const results = await analyzeWithGemini(symptoms, context);
       return res.json({ ...results, engine: 'gemini' });
     } catch (error) {
       console.error('Gemini analysis failed, falling back to local model:', error.message);

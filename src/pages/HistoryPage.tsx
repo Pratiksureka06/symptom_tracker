@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSymptoms } from '../contexts/SymptomContext';
-import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import HistoryItem from '../components/history/HistoryItem';
 import { History, ArrowLeft, Trash2, Download, AlertTriangle, FileText, Sparkles, ShieldCheck } from 'lucide-react';
@@ -9,7 +8,6 @@ import jsPDF from 'jspdf';
 import papaparse from 'papaparse';
 
 const HistoryPage: React.FC = () => {
-  const { t } = useLanguage();
   const { history, clearHistory, removeFromHistory } = useSymptoms();
   const { addToast } = useToast();
   const [showConfirmClear, setShowConfirmClear] = useState(false);
@@ -116,7 +114,7 @@ const HistoryPage: React.FC = () => {
             </Link>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-bold text-slate-800 tracking-tight">{t('history')}</h1>
+                <h1 className="text-2xl font-bold text-slate-800 tracking-tight">{'History'}</h1>
                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[0.8125rem] font-semibold bg-[rgb(var(--app-raised))] text-[rgb(var(--ink))] border border-[rgb(var(--app-border))]">
                   {history.length} Record{history.length === 1 ? '' : 's'}
                 </span>
@@ -169,7 +167,7 @@ const HistoryPage: React.FC = () => {
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-[rgb(var(--ink))] hover:bg-[rgb(var(--field-low))] text-white text-[0.8125rem] font-semibold rounded-lg transition-colors"
             >
               <Sparkles className="w-4 h-4" />
-              <span>{t('startButton')}</span>
+              <span>{'Start a symptom check'}</span>
             </Link>
           </div>
         )}

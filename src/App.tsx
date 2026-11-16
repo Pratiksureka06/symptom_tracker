@@ -13,7 +13,6 @@ import DoctorPortalPage from './pages/DoctorPortalPage';
 import PatientConsultationsPage from './pages/PatientConsultationsPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import { LanguageProvider } from './contexts/LanguageContext';
 import { SymptomProvider } from './contexts/SymptomContext';
 import { MedicationProvider } from './contexts/MedicationContext';
 import { ToastProvider } from './contexts/ToastContext';
@@ -22,7 +21,6 @@ import { AuthProvider } from './contexts/AuthContext';
 function App() {
   return (
     <ToastProvider>
-      <LanguageProvider>
         <AuthProvider>
           <SymptomProvider>
             <MedicationProvider>
@@ -53,7 +51,6 @@ function App() {
             </MedicationProvider>
           </SymptomProvider>
         </AuthProvider>
-      </LanguageProvider>
     </ToastProvider>
   );
 }
